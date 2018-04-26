@@ -1,4 +1,6 @@
 package taing.tran.vivier.androidgame.Artefact;
 
-public interface Artefact {
+import android.os.Parcelable;
+
+public interface Artefact extends Parcelable {
 }

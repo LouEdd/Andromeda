@@ -1,27 +1,38 @@
 package taing.tran.vivier.androidgame;
 
-import android.animation.ObjectAnimator;
+import android.app.ActionBar;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
+
+import taing.tran.vivier.androidgame.Persona.Character;
 
 /**
  * Created by Eddy on 23/04/2018.
  */
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
-
+    private View rootView;
     private GameThread gameThread;
     private Character character;
+    private Button button;
 
     public GameView(Context context){
         super(context);
+        getHolder().addCallback(this);
+        gameThread = new GameThread(this);
+        character = new Character(this.getContext());
+
+    }
+
+    public GameView(Context context, android.util.AttributeSet attrs){
+        super(context, attrs);
         getHolder().addCallback(this);
         gameThread = new GameThread(this);
         character = new Character(this.getContext());
@@ -82,4 +93,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
         return true;
     }
+
+
+    public int getHealth(){
+        return character.getHealth();
+    }
+
+
+
 }
