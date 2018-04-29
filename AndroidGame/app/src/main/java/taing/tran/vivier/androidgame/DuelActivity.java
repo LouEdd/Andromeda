@@ -2,41 +2,52 @@ package taing.tran.vivier.androidgame;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
+import taing.tran.vivier.androidgame.Persona.HealthBarFragment;
 
-public class DuelActivity extends AppCompatActivity {
+
+public class DuelActivity extends AppCompatActivity implements OnFragmentListener {
+    private int hp;
+    HealthBarFragment healthBarFragment;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.duel_activity);
+        healthBarFragment = (HealthBarFragment) getFragmentManager().findFragmentById(R.id.fragmentation);
 
-
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        final TextView textView = (TextView) findViewById(R.id.hp);
         final Button button = (Button) findViewById(R.id.buttonDuel);
-        final
+
 
         Intent intent = getIntent();
+        hp = intent.getIntExtra("hp", 0);
 
-        final ArrayList<Parcelable> list = intent.getParcelableArrayListExtra("list");
-        int hp = intent.getIntExtra("hp", 0);
-
-        progressBar.setMax(hp);
-        progressBar.setProgress(hp);
 
 
 
     }
 
     public void onClickButtonDuel(View view){
-        Toast.makeText(this, "CLICKED", Toast.LENGTH_LONG).show();
+        hp -= 10;
+        onFragmentInteraction(hp);
+        if(hp <= 0){
+            Intent intent = new Intent();
+            intent.putExtra("hp", hp);
+            setResult(2, intent);
+            finish();
+        }
+
+    }
+
+
+    @Override
+    public void onFragmentInteraction(int hp) {
+        //HealthBarFragment healthBarFragment = (HealthBarFragment) getFragmentManager().findFragmentById(R.id.fragmentation);
+        healthBarFragment.setHealth(hp);
+        healthBarFragment.setText(hp + "");
     }
 }

@@ -1,6 +1,7 @@
 package taing.tran.vivier.androidgame;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,8 +11,10 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import taing.tran.vivier.androidgame.Persona.Character;
+import taing.tran.vivier.androidgame.Persona.HealthBarFragment;
 
 /**
  * Created by Eddy on 23/04/2018.
@@ -22,6 +25,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private GameThread gameThread;
     private Character character;
     private Button button;
+    private HealthBarFragment healthBarFragment;
 
     public GameView(Context context){
         super(context);
@@ -43,8 +47,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             return;
         }
 
-        canvas.drawColor(Color.BLACK);
+        canvas.drawColor(Color.WHITE);
         character.draw(canvas);
+
     }
 
     public void update(){
@@ -97,6 +102,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public int getHealth(){
         return character.getHealth();
+    }
+
+    public void setHealth(int health){
+        character.setHealth(health);
     }
 
 

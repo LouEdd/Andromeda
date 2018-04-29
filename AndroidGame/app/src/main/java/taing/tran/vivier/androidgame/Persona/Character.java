@@ -3,8 +3,12 @@ package taing.tran.vivier.androidgame.Persona;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.ArrayList;
 
@@ -15,7 +19,7 @@ import taing.tran.vivier.androidgame.R;
  * Created by Eddy on 23/04/2018.
  */
 
-public class Character {
+public class Character implements Parcelable {
     private BitmapDrawable img;
     private int widthScreen;
     private int heightScreen;
@@ -33,6 +37,7 @@ public class Character {
     private int health;
     private int damage;
     private final ArrayList<Artefact> inventory;
+    private final Paint paint;
 
     public Character(Context context){
         this.context = context;
@@ -41,7 +46,7 @@ public class Character {
         this.health = 100;
         this.damage = 10;
         this.inventory = new ArrayList<>();
-
+        this.paint = new Paint();
 
     }
 
@@ -117,7 +122,12 @@ public class Character {
         if(img==null){
             return;
         }
+        canvas.drawPaint(paint);
+        canvas.drawColor(Color.BLACK);
+        paint.setTextSize(32);
+        paint.setColor(Color.WHITE);
         canvas.drawBitmap(img.getBitmap(), x ,y , null);
+        canvas.drawText(health + "", x, y, paint);
         this.lastDrawNanoTime = System.nanoTime();
     }
 
@@ -135,5 +145,19 @@ public class Character {
 
     public void setX(int x) {
         this.x = x;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 }
