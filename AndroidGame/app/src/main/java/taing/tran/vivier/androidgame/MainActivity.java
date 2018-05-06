@@ -1,29 +1,52 @@
 package taing.tran.vivier.androidgame;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import taing.tran.vivier.androidgame.Persona.HealthBar;
 import taing.tran.vivier.androidgame.Persona.HealthBarFragment;
 
-public class MainActivity extends AppCompatActivity implements OnFragmentListener {
+public class MainActivity extends AppCompatActivity {
     private GameView gameView;
-    private HealthBarFragment healthBarFragment;
     private int hp;
-
+    private ProgressBar progressBar;
+    private TextView textView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        healthBarFragment = (HealthBarFragment) getFragmentManager().findFragmentById(R.id.fragmentation);
 
+        progressBar = (ProgressBar) findViewById(R.id.progressBarMain);
+        textView = (TextView) findViewById(R.id.textViewHP);
         gameView = (GameView) findViewById(R.id.gameView);
         final Button button = (Button) findViewById(R.id.buttonMain);
+        textView.setTextColor(Color.BLACK);
+        //hp = gameView.getHealth();
+        //textView.setText(String.valueOf(hp));
+        hp = gameView.getHealth();
+        textView.setText(String.valueOf(hp));
+
+
+        progressBar.setProgress(hp);
+
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        hp = gameView.getHealth();
+        textView.setText(String.valueOf(hp));
+        progressBar.setProgress(hp);
+
     }
 
     @Override
@@ -58,11 +81,5 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-    @Override
-    public void onFragmentInteraction(int hp) {
-       // HealthBarFragment healthBarFragment = (HealthBarFragment) getFragmentManager().findFragmentById(R.id.fragmentation);
-        healthBarFragment.setHealth(hp);
-        healthBarFragment.setText(hp + "");
-    }
 
 }
