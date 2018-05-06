@@ -7,13 +7,15 @@ public abstract class ArtifactObject {
 
     protected Bitmap image;
 
-    protected int x;
-    protected int y;
+    private static final int MAP_WIDTH = 640;
+    private static final int MAP_HEIGHT = 480;
+    protected float x;
+    protected float y;
 
-    public ArtifactObject(Bitmap image, int x, int y) {
+    public ArtifactObject(Bitmap image) {
         this.image = image;
-        this.x = x;
-        this.y = y;
+        this.x = (float) Math.random() * MAP_WIDTH;
+        this.y = (float )Math.random() * MAP_HEIGHT;
 
     }
 
@@ -21,11 +23,11 @@ public abstract class ArtifactObject {
         canvas.drawBitmap(image, x, y, null);
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
