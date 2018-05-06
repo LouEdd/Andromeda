@@ -2,7 +2,7 @@ package taing.tran.vivier.androidgame.Artefact;
 
 import android.os.Parcel;
 
-public class Sword implements Artefact {
+public class Sword implements Artifact {
     private Bonus bonus;
 
 

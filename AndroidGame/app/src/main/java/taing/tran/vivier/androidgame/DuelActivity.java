@@ -9,19 +9,18 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import taing.tran.vivier.androidgame.Artefact.Artefact;
+import taing.tran.vivier.androidgame.Artefact.Artifact;
 import taing.tran.vivier.androidgame.Artefact.Sword;
 
 
 public class DuelActivity extends AppCompatActivity{
     private int hp;
     private ProgressBar progressBar;
-    private Artefact artefact;
-    private ArrayList<Artefact> list = new ArrayList<>();
+    private Artifact artefact;
+    private ArrayList<Artifact> list = new ArrayList<>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,13 +34,13 @@ public class DuelActivity extends AppCompatActivity{
         list.add(new Sword(20, this));
         list.add(new Sword(30, this));
 
-        ArrayAdapter<Artefact> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
+        ArrayAdapter<Artifact> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                artefact = (Artefact) adapterView.getItemAtPosition(i);
+                artefact = (Artifact) adapterView.getItemAtPosition(i);
             }
         });
 

@@ -10,7 +10,7 @@ import android.graphics.drawable.Drawable;
 
 import java.util.ArrayList;
 
-import taing.tran.vivier.androidgame.Artefact.Artefact;
+import taing.tran.vivier.androidgame.Artefact.Artifact;
 import taing.tran.vivier.androidgame.R;
 
 /**
@@ -34,7 +34,7 @@ public class Character implements MySubject {
     private long lastDrawNanoTime = -1;
     private int health;
     private int damage;
-    private final ArrayList<Artefact> inventory;
+    private final ArrayList<Artifact> inventory;
     private final Paint paint;
     private final ArrayList<MyObserver> observers;
 
