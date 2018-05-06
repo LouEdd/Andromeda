@@ -3,22 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment
-        android:id="@+id/fragment"
-        android:name="taing.tran.vivier.androidgame.Persona.HealthBarFragment"
-        android:layout_width="303dp"
-        android:layout_height="52dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <taing.tran.vivier.androidgame.GameView
-        android:id="@+id/gameView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="53dp"></taing.tran.vivier.androidgame.GameView>
-
     <Button
         android:id="@+id/buttonMain"
         android:layout_width="wrap_content"
@@ -28,6 +12,29 @@
         android:layout_marginBottom="143dp"
         android:onClick="onClickButtonMain"
         android:text="@string/duel" />
+
+    <taing.tran.vivier.androidgame.GameView
+        android:id="@+id/gameView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"></taing.tran.vivier.androidgame.GameView>
+
+    <ProgressBar
+        android:id="@+id/progressBarMain"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="336dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp" />
+
+    <TextView
+        android:id="@+id/textViewHP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 
 
 </RelativeLayout>
