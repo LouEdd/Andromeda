@@ -1,25 +1,27 @@
 package taing.tran.vivier.androidgame.Artefact;
 
-public class Bonus implements Artifact {
-    public enum BonusKind {
-        Speedster(0, 5, 0),
-        HealthPotion(0, 0, 5),
-        RedBull(2, 2, 2),;
+public class Penalty implements Artifact {
+    public enum PenaltyKind {
+        Trap(0, -5, 0),
+        Mine(0, 0, -15),
+        Envenom(-1, -1, -1),
+
+        ;
 
         final double damage;
         final int health;
         final int speed;
 
-        private BonusKind(double damage, int speed, int health) {
+        private PenaltyKind(double damage, int speed, int health) {
             this.damage = damage;
             this.speed = speed;
             this.health = health;
         }
     }
 
-    private final BonusKind kind;
+    private final PenaltyKind kind;
 
-    public Bonus(BonusKind kind) {
+    public Penalty(PenaltyKind kind) {
         this.kind = kind;
     }
 
@@ -35,7 +37,7 @@ public class Bonus implements Artifact {
         return kind.damage;
     }
 
-    public BonusKind kind() {
+    public PenaltyKind kind() {
         return kind;
     }
 }
