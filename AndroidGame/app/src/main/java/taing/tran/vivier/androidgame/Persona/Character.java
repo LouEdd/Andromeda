@@ -130,7 +130,6 @@ public class Character implements MySubject {
         if(img==null){
             return;
         }
-        canvas.drawPaint(paint);
         paint.setTextSize(32);
         paint.setColor(Color.WHITE);
         canvas.drawBitmap(img.getBitmap(), x ,y , null);

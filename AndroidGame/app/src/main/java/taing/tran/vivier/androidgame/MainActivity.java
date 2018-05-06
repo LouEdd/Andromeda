@@ -1,17 +1,15 @@
 package taing.tran.vivier.androidgame;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import taing.tran.vivier.androidgame.Persona.HealthBar;
-import taing.tran.vivier.androidgame.Persona.HealthBarFragment;
 
 public class MainActivity extends AppCompatActivity {
     private GameView gameView;
@@ -24,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        getSupportActionBar().hide();
         progressBar = (ProgressBar) findViewById(R.id.progressBarMain);
         textView = (TextView) findViewById(R.id.textViewHP);
         gameView = (GameView) findViewById(R.id.gameView);
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         hp = gameView.getHealth();
         textView.setText(String.valueOf(hp));
