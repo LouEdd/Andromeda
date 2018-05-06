@@ -7,8 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import java.util.ArrayList;
 
@@ -19,7 +17,7 @@ import taing.tran.vivier.androidgame.R;
  * Created by Eddy on 23/04/2018.
  */
 
-public class Character implements Parcelable {
+public class Character implements MySubject {
     private BitmapDrawable img;
     private int widthScreen;
     private int heightScreen;
@@ -38,6 +36,7 @@ public class Character implements Parcelable {
     private int damage;
     private final ArrayList<Artefact> inventory;
     private final Paint paint;
+    private final ArrayList<MyObserver> observers;
 
     public Character(Context context){
         this.context = context;
@@ -47,6 +46,9 @@ public class Character implements Parcelable {
         this.damage = 10;
         this.inventory = new ArrayList<>();
         this.paint = new Paint();
+        this.observers = new ArrayList<>();
+
+
 
     }
 
@@ -76,6 +78,8 @@ public class Character implements Parcelable {
         this.y = y + (int) (distance * moveY / moveLength);
 
 
+        // Pour ne pas sortir de l'écran : A SUPPRIMER AVEC LA MAP
+
         if(x < 0){
             x = 0;
         }else if(x > widthScreen - width){
@@ -88,13 +92,17 @@ public class Character implements Parcelable {
             y = heightScreen - height;
         }
 
-        if(x <= targetX + width && x >= targetX - width){
+
+        // Pour s'arreter ou le player a toucher avec son doigt
+        if(x <= targetX && x >= targetX - width){
             moveX = 0;
         }
 
-        if(y <= targetY + height && y >= targetY - height){
+        if(y <= targetY && y >= targetY - height){
             moveY = 0;
         }
+
+
 
 
 
@@ -123,7 +131,6 @@ public class Character implements Parcelable {
             return;
         }
         canvas.drawPaint(paint);
-        canvas.drawColor(Color.BLACK);
         paint.setTextSize(32);
         paint.setColor(Color.WHITE);
         canvas.drawBitmap(img.getBitmap(), x ,y , null);
@@ -147,17 +154,27 @@ public class Character implements Parcelable {
         this.x = x;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-
-    }
 
     public void setHealth(int health) {
         this.health = health;
+        notifyObservers();
+    }
+
+    @Override
+    public void registerObserver(MyObserver o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void unregisterObserver(MyObserver o) {
+        observers.remove(o);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(MyObserver o : observers){
+            o.update(this.health);
+        }
     }
 }
