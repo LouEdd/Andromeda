@@ -40,4 +40,9 @@ public class Weapon implements Artifact {
     public WeaponKind kind() {
         return kind;
     }
+
+    @Override
+    public String toString(){
+        return this.kind.name() + " " + (int) damage();
+    }
 }
