@@ -13,7 +13,7 @@ import android.widget.ProgressBar;
 import java.util.ArrayList;
 
 import taing.tran.vivier.androidgame.Artefact.Artifact;
-import taing.tran.vivier.androidgame.Artefact.Sword;
+import taing.tran.vivier.androidgame.Artefact.Weapon;
 
 
 public class DuelActivity extends AppCompatActivity{
@@ -30,9 +30,9 @@ public class DuelActivity extends AppCompatActivity{
         final Button button = (Button) findViewById(R.id.buttonDuel);
         final ListView listView = (ListView) findViewById(R.id.artefact_list);
 
-        list.add(new Sword(10, this));
-        list.add(new Sword(20, this));
-        list.add(new Sword(30, this));
+        list.add(new Weapon(Weapon.WeaponKind.Dagger));
+        list.add(new Weapon(Weapon.WeaponKind.Spear));
+        list.add(new Weapon(Weapon.WeaponKind.Sword));
 
         ArrayAdapter<Artifact> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         listView.setAdapter(adapter);
@@ -55,7 +55,7 @@ public class DuelActivity extends AppCompatActivity{
             return;
         }
 
-        hp -= artefact.getDamage();
+        hp -= artefact.damage();
     //    onFragmentInteraction(hp);
         progressBar.setProgress(hp);
         if (hp <= 0) {
