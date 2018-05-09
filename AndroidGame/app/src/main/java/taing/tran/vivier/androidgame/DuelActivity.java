@@ -13,9 +13,7 @@ import android.widget.ProgressBar;
 import java.util.ArrayList;
 
 import taing.tran.vivier.androidgame.Artefact.Artifact;
-import taing.tran.vivier.androidgame.Artefact.Shield;
 import taing.tran.vivier.androidgame.Artefact.Weapon;
-import taing.tran.vivier.androidgame.Persona.Character;
 
 
 public class DuelActivity extends AppCompatActivity{
@@ -23,10 +21,6 @@ public class DuelActivity extends AppCompatActivity{
     private ProgressBar progressBar;
     private Artifact artefact;
     private ArrayList<Artifact> list = new ArrayList<>();
-    private ArrayList<Artifact> defense = new ArrayList<>();
-    /*
-    * Should add a second defender
-    * */
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,9 +29,6 @@ public class DuelActivity extends AppCompatActivity{
 
         final Button button = (Button) findViewById(R.id.buttonDuel);
         final ListView listView = (ListView) findViewById(R.id.artefact_list);
-
-        defense.add(new Shield(Shield.ShieldKind.ValkyrjaShield));
-
 
         list.add(new Weapon(Weapon.WeaponKind.Dagger));
         list.add(new Weapon(Weapon.WeaponKind.Spear));
@@ -64,7 +55,7 @@ public class DuelActivity extends AppCompatActivity{
             return;
         }
 
-        hp -= (artefact.damage() - defense.get(0).health());
+        hp -= artefact.damage();
     //    onFragmentInteraction(hp);
         progressBar.setProgress(hp);
         if (hp <= 0) {
