@@ -13,7 +13,9 @@ import android.widget.ProgressBar;
 import java.util.ArrayList;
 
 import taing.tran.vivier.androidgame.Artefact.Artifact;
-import taing.tran.vivier.androidgame.Artefact.Sword;
+import taing.tran.vivier.androidgame.Artefact.Shield;
+import taing.tran.vivier.androidgame.Artefact.Weapon;
+import taing.tran.vivier.androidgame.Persona.Character;
 
 
 public class DuelActivity extends AppCompatActivity{
@@ -21,6 +23,10 @@ public class DuelActivity extends AppCompatActivity{
     private ProgressBar progressBar;
     private Artifact artefact;
     private ArrayList<Artifact> list = new ArrayList<>();
+    private ArrayList<Artifact> defense = new ArrayList<>();
+    /*
+    * Should add a second defender
+    * */
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,9 +36,12 @@ public class DuelActivity extends AppCompatActivity{
         final Button button = (Button) findViewById(R.id.buttonDuel);
         final ListView listView = (ListView) findViewById(R.id.artefact_list);
 
-        list.add(new Sword(10, this));
-        list.add(new Sword(20, this));
-        list.add(new Sword(30, this));
+        defense.add(new Shield(Shield.ShieldKind.ValkyrjaShield));
+
+
+        list.add(new Weapon(Weapon.WeaponKind.Dagger));
+        list.add(new Weapon(Weapon.WeaponKind.Spear));
+        list.add(new Weapon(Weapon.WeaponKind.Sword));
 
         ArrayAdapter<Artifact> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         listView.setAdapter(adapter);
@@ -55,7 +64,7 @@ public class DuelActivity extends AppCompatActivity{
             return;
         }
 
-        hp -= artefact.getDamage();
+        hp -= (artefact.damage() - defense.get(0).health());
     //    onFragmentInteraction(hp);
         progressBar.setProgress(hp);
         if (hp <= 0) {

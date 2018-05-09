@@ -22,6 +22,7 @@ import taing.tran.vivier.androidgame.battlefield.Battlefield;
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private GameThread gameThread;
     private Character character;
+    private Character secondCharacter;
     private SurfaceHolder surfaceHolder;
     private HealthBar healthBar;
     private Battlefield battlefield;
@@ -42,6 +43,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private void init() {
         gameThread = new GameThread(this);
         character = new Character(this.getContext());
+        secondCharacter = new Character(this.getContext());
+        secondCharacter.setX(500);
+        secondCharacter.setY(500);
         healthBar = new HealthBar(character.getHealth());
         character.registerObserver(healthBar);
         battlefield = Battlefield.createDefault(this.getContext());
@@ -66,6 +70,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawPaint(transparentPaint); // efface la couche précédente sans effacer le background
         battlefield.draw(canvas);
         character.draw(canvas);
+        secondCharacter.draw(canvas);
     }
 
     public void update() {
@@ -85,6 +90,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
         character.resize(i1, i2);
+        secondCharacter.resize(i1, i2);
     }
 
     @Override
