@@ -1,6 +1,8 @@
 package taing.tran.vivier.androidgame.Artefact;
 
-public class Bonus implements Artifact {
+import android.graphics.Bitmap;
+
+public class Bonus extends ArtifactObject {
     public enum BonusKind {
         Speedster(0, 5, 0),
         HealthPotion(0, 0, 5),
@@ -19,7 +21,8 @@ public class Bonus implements Artifact {
 
     private final BonusKind kind;
 
-    public Bonus(BonusKind kind) {
+    public Bonus(Bitmap image, BonusKind kind) {
+        super(image);
         this.kind = kind;
     }
 

@@ -3,9 +3,9 @@ package taing.tran.vivier.androidgame.Artefact;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-public abstract class ArtifactObject {
+public abstract class ArtifactObject implements Artifact {
 
-    protected Bitmap image;
+    private Bitmap image;
 
     private static final int MAP_WIDTH = 640;
     private static final int MAP_HEIGHT = 480;
@@ -31,4 +31,7 @@ public abstract class ArtifactObject {
         return y;
     }
 
+    public Bitmap getBitmap(){
+        return image;
+    }
 }

@@ -1,6 +1,8 @@
 package taing.tran.vivier.androidgame.Artefact;
 
-public class Shield implements Artifact {
+import android.graphics.Bitmap;
+
+public class Shield extends ArtifactObject {
     public enum ShieldKind {
         TornyShield(0, 5, 5),
         ValkyrjaShield(0, 2, 10),
@@ -20,7 +22,8 @@ public class Shield implements Artifact {
 
     private final ShieldKind kind;
 
-    public Shield(ShieldKind kind) {
+    public Shield(Bitmap image, ShieldKind kind) {
+        super(image);
         this.kind = kind;
     }
 

@@ -8,6 +8,8 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import taing.tran.vivier.androidgame.R;
 import taing.tran.vivier.androidgame.battlefield.obstacle.Obstacle;
@@ -62,5 +64,9 @@ public class Battlefield {
 
     public BitmapDrawable getBattlefieldImg() {
         return battlefieldImg;
+    }
+
+    public List<Obstacle> getObstacles() {
+        return Collections.unmodifiableList(obstacles);
     }
 }

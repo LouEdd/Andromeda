@@ -1,7 +1,9 @@
 package taing.tran.vivier.androidgame.Artefact;
 
 
-public class Weapon implements Artifact {
+import android.graphics.Bitmap;
+
+public class Weapon extends ArtifactObject{
     public enum WeaponKind {
         Sword(15, 0, 0),
         Dagger(8, 5, 0),
@@ -14,7 +16,7 @@ public class Weapon implements Artifact {
 
         private WeaponKind(double damage, int speed, int health) {
             double scarcity = Math.random() * 5;
-            this.damage = damage*1.25*scarcity;
+            this.damage = damage + 1.25*scarcity;
             this.speed = speed;
             this.health = health;
         }
@@ -22,7 +24,8 @@ public class Weapon implements Artifact {
 
     private final WeaponKind kind;
 
-    public Weapon(WeaponKind kind){
+    public Weapon(Bitmap image, WeaponKind kind){
+        super(image);
         this.kind = kind;
     }
 

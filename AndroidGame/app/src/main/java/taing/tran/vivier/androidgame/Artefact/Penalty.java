@@ -1,6 +1,8 @@
 package taing.tran.vivier.androidgame.Artefact;
 
-public class Penalty implements Artifact {
+import android.graphics.Bitmap;
+
+public class Penalty extends ArtifactObject{
     public enum PenaltyKind {
         Trap(0, -5, 0),
         Mine(0, 0, -15),
@@ -21,7 +23,8 @@ public class Penalty implements Artifact {
 
     private final PenaltyKind kind;
 
-    public Penalty(PenaltyKind kind) {
+    public Penalty(Bitmap image, PenaltyKind kind) {
+        super(image);
         this.kind = kind;
     }
 

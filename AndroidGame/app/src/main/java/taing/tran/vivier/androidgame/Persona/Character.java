@@ -5,9 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import taing.tran.vivier.androidgame.Artefact.Artifact;
@@ -17,7 +20,7 @@ import taing.tran.vivier.androidgame.R;
  * Created by Eddy on 23/04/2018.
  */
 
-public class Character implements MySubject {
+public class Character implements MySubject, Serializable {
     private BitmapDrawable img;
     private int widthScreen;
     private int heightScreen;
@@ -37,6 +40,9 @@ public class Character implements MySubject {
     private final ArrayList<Artifact> inventory;
     private final Paint paint;
     private final ArrayList<MyObserver> observers;
+    private Rect rect;
+    private boolean fighting;
+
 
     public Character(Context context){
         this.context = context;
@@ -47,9 +53,7 @@ public class Character implements MySubject {
         this.inventory = new ArrayList<>();
         this.paint = new Paint();
         this.observers = new ArrayList<>();
-
-
-
+        this.rect = new Rect();
     }
 
     public int getHealth(){
@@ -77,6 +81,7 @@ public class Character implements MySubject {
         this.x = x + (int) (distance * moveX / moveLength);
         this.y = y + (int) (distance * moveY / moveLength);
 
+        rect.set(x, y, width + x, height + y);
 
         // Pour ne pas sortir de l'écran : A SUPPRIMER AVEC LA MAP
 
@@ -134,14 +139,16 @@ public class Character implements MySubject {
         paint.setColor(Color.WHITE);
         canvas.drawBitmap(img.getBitmap(), x ,y , null);
         canvas.drawText(health + "", x, y, paint);
+        canvas.drawRect(rect, paint);
+
         this.lastDrawNanoTime = System.nanoTime();
     }
 
     public void resize(int i1, int i2) {
         widthScreen = i1;
         heightScreen = i2;
-        width = widthScreen/10;
-        height = heightScreen/10;
+        width = 50;
+        height = 50;
         img = setImage(context, R.drawable.chun, width, height);
     }
 
@@ -175,5 +182,22 @@ public class Character implements MySubject {
         for(MyObserver o : observers){
             o.update(this.health);
         }
+    }
+
+    public Rect getRect() {
+        return rect;
+    }
+
+    public void stopMoving() {
+     this.moveX = 0;
+     this.moveY = 0;
+    }
+
+    public boolean isFighting() {
+        return fighting;
+    }
+
+    public void isFighting(boolean isFighting) {
+        this.fighting = isFighting;
     }
 }

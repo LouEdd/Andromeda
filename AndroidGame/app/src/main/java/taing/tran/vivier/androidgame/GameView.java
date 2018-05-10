@@ -1,12 +1,15 @@
 package taing.tran.vivier.androidgame;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -14,6 +17,7 @@ import android.view.SurfaceView;
 import taing.tran.vivier.androidgame.Persona.Character;
 import taing.tran.vivier.androidgame.Persona.HealthBar;
 import taing.tran.vivier.androidgame.battlefield.Battlefield;
+import taing.tran.vivier.androidgame.battlefield.obstacle.Obstacle;
 
 /**
  * Created by Eddy on 23/04/2018.
@@ -27,15 +31,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private HealthBar healthBar;
     private Battlefield battlefield;
     private Paint transparentPaint;
+    private Context context;
 
     public GameView(Context context) {
         super(context);
+        this.context = context;
         getHolder().addCallback(this);
         init();
     }
 
     public GameView(Context context, android.util.AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         getHolder().addCallback(this);
         init();
     }
@@ -75,6 +82,22 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
         this.character.update();
+        this.secondCharacter.update();
+
+        if(Rect.intersects(character.getRect(), secondCharacter.getRect()) && !character.isFighting()){
+            character.isFighting(true);
+            Intent newIntent = new Intent(context, DuelActivity.class);
+            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            newIntent.putExtra("fighter1", character);
+            context.startActivity(newIntent);
+        }
+
+        for(Obstacle obstacle : battlefield.getObstacles()){
+            if(Rect.intersects(obstacle.getRect(), character.getRect())){
+                character.stopMoving();
+            }
+        }
+
     }
 
 
@@ -127,6 +150,5 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void setHealth(int health) {
         character.setHealth(health);
     }
-
 
 }
