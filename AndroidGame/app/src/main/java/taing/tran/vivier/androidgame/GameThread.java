@@ -1,6 +1,7 @@
 package taing.tran.vivier.androidgame;
 
 import android.graphics.Canvas;
+import android.util.Log;
 
 /**
  * Created by Eddy on 23/04/2018.

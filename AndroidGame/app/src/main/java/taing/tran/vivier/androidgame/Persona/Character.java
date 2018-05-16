@@ -9,6 +9,8 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ import taing.tran.vivier.androidgame.R;
  * Created by Eddy on 23/04/2018.
  */
 
-public class Character implements MySubject, Serializable {
+public class Character implements Parcelable {
     private BitmapDrawable img;
     private int widthScreen;
     private int heightScreen;
@@ -33,28 +35,59 @@ public class Character implements MySubject, Serializable {
     private float speed = 1f;
     private int moveX = 0;
     private int moveY = 0;
-    private final Context context;
+    //private final Context context;
     private long lastDrawNanoTime = -1;
     private int health;
     private int damage;
     private final ArrayList<Artifact> inventory;
-    private final Paint paint;
-    private final ArrayList<MyObserver> observers;
+    //private final Paint paint;
     private Rect rect;
     private boolean fighting;
 
 
     public Character(Context context){
-        this.context = context;
+        //this.context = context;
         this.x = 10;
         this.y = 10;
         this.health = 100;
         this.damage = 10;
         this.inventory = new ArrayList<>();
-        this.paint = new Paint();
-        this.observers = new ArrayList<>();
-        this.rect = new Rect();
+        //this.paint = new Paint();
+        this.rect = new Rect(0, 0, 0, 0);
     }
+
+    protected Character(Parcel in) {
+        widthScreen = in.readInt();
+        heightScreen = in.readInt();
+        height = in.readInt();
+        width = in.readInt();
+        x = in.readInt();
+        y = in.readInt();
+        targetX = in.readInt();
+        targetY = in.readInt();
+        speed = in.readFloat();
+        moveX = in.readInt();
+        moveY = in.readInt();
+        lastDrawNanoTime = in.readLong();
+        health = in.readInt();
+        damage = in.readInt();
+        rect = in.readParcelable(Rect.class.getClassLoader());
+        fighting = in.readByte() != 0;
+        inventory = in.readArrayList(null);
+
+    }
+
+    public static final Creator<Character> CREATOR = new Creator<Character>() {
+        @Override
+        public Character createFromParcel(Parcel in) {
+            return new Character(in);
+        }
+
+        @Override
+        public Character[] newArray(int size) {
+            return new Character[size];
+        }
+    };
 
     public int getHealth(){
         return health;
@@ -132,14 +165,19 @@ public class Character implements MySubject, Serializable {
 
 
     public void draw(Canvas canvas) {
-        if(img==null){
+        /*if(img==null){
             return;
+        }*/
+        if(health > 0){
+
+            Paint paint = new Paint();
+            paint.setTextSize(32);
+            paint.setColor(Color.WHITE);
+            //canvas.drawBitmap(img.getBitmap(), x ,y , null);
+            canvas.drawText(health + "", x, y, paint);
+            canvas.drawRect(rect, paint);
+
         }
-        paint.setTextSize(32);
-        paint.setColor(Color.WHITE);
-        canvas.drawBitmap(img.getBitmap(), x ,y , null);
-        canvas.drawText(health + "", x, y, paint);
-        canvas.drawRect(rect, paint);
 
         this.lastDrawNanoTime = System.nanoTime();
     }
@@ -149,7 +187,7 @@ public class Character implements MySubject, Serializable {
         heightScreen = i2;
         width = 50;
         height = 50;
-        img = setImage(context, R.drawable.chun, width, height);
+        //img = setImage(context, R.drawable.chun, width, height);
     }
 
     public void setY(int y) {
@@ -164,25 +202,8 @@ public class Character implements MySubject, Serializable {
 
     public void setHealth(int health) {
         this.health = health;
-        notifyObservers();
     }
 
-    @Override
-    public void registerObserver(MyObserver o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void unregisterObserver(MyObserver o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notifyObservers() {
-        for(MyObserver o : observers){
-            o.update(this.health);
-        }
-    }
 
     public Rect getRect() {
         return rect;
@@ -199,5 +220,31 @@ public class Character implements MySubject, Serializable {
 
     public void isFighting(boolean isFighting) {
         this.fighting = isFighting;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(widthScreen);
+        dest.writeInt(heightScreen);
+        dest.writeInt(height);
+        dest.writeInt(width);
+        dest.writeInt(x);
+        dest.writeInt(y);
+        dest.writeInt(targetX);
+        dest.writeInt(targetY);
+        dest.writeFloat(speed);
+        dest.writeInt(moveX);
+        dest.writeInt(moveY);
+        dest.writeLong(lastDrawNanoTime);
+        dest.writeInt(health);
+        dest.writeInt(damage);
+        dest.writeParcelable(rect, flags);
+        dest.writeByte((byte) (fighting ? 1 : 0));
+        dest.writeList(inventory);
     }
 }

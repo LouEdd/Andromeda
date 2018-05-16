@@ -18,10 +18,13 @@ import taing.tran.vivier.androidgame.Artefact.Artifact;
 import taing.tran.vivier.androidgame.Artefact.ArtifactAdapter;
 import taing.tran.vivier.androidgame.Artefact.ArtifactObject;
 import taing.tran.vivier.androidgame.Artefact.Weapon;
+import taing.tran.vivier.androidgame.Persona.Character;
 
 
 public class DuelActivity extends AppCompatActivity{
     private int hp;
+    private Character fighter1;
+    private Character ennemy;
     private ProgressBar progressBar;
     private Artifact artefact;
     private ArrayList<Artifact> list = new ArrayList<>();
@@ -52,7 +55,10 @@ public class DuelActivity extends AppCompatActivity{
         });
 
         Intent intent = getIntent();
-        hp = intent.getIntExtra("hp", 0);
+        fighter1 = ((Character) intent.getParcelableExtra("fighter1"));
+        ennemy = (Character) intent.getParcelableExtra("ennemy");
+        hp = ennemy.getHealth();
+        //hp = intent.getIntExtra("hp", 0);
         progressBar.setProgress(hp);
 
     }
@@ -63,23 +69,23 @@ public class DuelActivity extends AppCompatActivity{
         }
 
         hp -= artefact.damage();
-    //    onFragmentInteraction(hp);
         progressBar.setProgress(hp);
+        ennemy.setHealth(hp);
         if (hp <= 0) {
             Intent intent = new Intent();
-            intent.putExtra("hp", hp);
+            intent.putExtra("fighter1", fighter1);
+            intent.putExtra("ennemy", ennemy);
             setResult(2, intent);
-            Character fighter1 = (Character) getIntent().getSerializableExtra("fighter1");
-            fighter1.isFighting(false);
+            //fighter1.isFighting(false);
             finish();
         }
-
     }
 
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putExtra("hp", hp);
+        intent.putExtra("fighter1", fighter1 );
+        intent.putExtra("ennemy", ennemy );
         setResult(2, intent);
         finish();
     }

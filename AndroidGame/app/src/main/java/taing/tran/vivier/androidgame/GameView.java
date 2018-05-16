@@ -1,5 +1,6 @@
 package taing.tran.vivier.androidgame;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -15,7 +16,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import taing.tran.vivier.androidgame.Persona.Character;
-import taing.tran.vivier.androidgame.Persona.HealthBar;
 import taing.tran.vivier.androidgame.battlefield.Battlefield;
 import taing.tran.vivier.androidgame.battlefield.obstacle.Obstacle;
 
@@ -28,14 +28,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Character character;
     private Character secondCharacter;
     private SurfaceHolder surfaceHolder;
-    private HealthBar healthBar;
     private Battlefield battlefield;
     private Paint transparentPaint;
     private Context context;
+    private Activity activity;
 
     public GameView(Context context) {
         super(context);
         this.context = context;
+        this.activity = (Activity) context;
         getHolder().addCallback(this);
         init();
     }
@@ -43,6 +44,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public GameView(Context context, android.util.AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
+        this.activity = (Activity) context;
         getHolder().addCallback(this);
         init();
     }
@@ -53,8 +55,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         secondCharacter = new Character(this.getContext());
         secondCharacter.setX(500);
         secondCharacter.setY(500);
-        healthBar = new HealthBar(character.getHealth());
-        character.registerObserver(healthBar);
         battlefield = Battlefield.createDefault(this.getContext());
         transparentPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         transparentPaint.setColor(Color.TRANSPARENT);
@@ -85,11 +85,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         this.secondCharacter.update();
 
         if(Rect.intersects(character.getRect(), secondCharacter.getRect()) && !character.isFighting()){
+            character.stopMoving();
+
             character.isFighting(true);
-            Intent newIntent = new Intent(context, DuelActivity.class);
-            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent newIntent = new Intent(activity, DuelActivity.class);
+
             newIntent.putExtra("fighter1", character);
-            context.startActivity(newIntent);
+            newIntent.putExtra("ennemy", secondCharacter);
+
+
+            //newIntent.putExtra("hp", character.getHealth());
+            activity.startActivityForResult(newIntent, 2);
+            character.stopMoving();
         }
 
         for(Obstacle obstacle : battlefield.getObstacles()){
@@ -144,11 +151,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 
     public int getHealth() {
-        return healthBar.getHealth();
+        return character.getHealth();
     }
 
     public void setHealth(int health) {
-        character.setHealth(health);
+        secondCharacter.setHealth(health);
     }
 
 }
