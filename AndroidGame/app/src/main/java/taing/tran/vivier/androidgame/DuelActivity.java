@@ -5,9 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 import taing.tran.vivier.androidgame.Artefact.Artifact;
 import taing.tran.vivier.androidgame.Artefact.ArtifactAdapter;
-import taing.tran.vivier.androidgame.Artefact.ArtifactObject;
 import taing.tran.vivier.androidgame.Artefact.Weapon;
 import taing.tran.vivier.androidgame.Persona.Character;
+import taing.tran.vivier.androidgame.Quizz.QuizzActivity;
 
 
 public class DuelActivity extends AppCompatActivity{
@@ -32,6 +32,7 @@ public class DuelActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.duel_activity);
+
         progressBar = (ProgressBar) findViewById(R.id.progressBar2);
 
         final Button button = (Button) findViewById(R.id.buttonDuel);
@@ -72,10 +73,13 @@ public class DuelActivity extends AppCompatActivity{
         progressBar.setProgress(hp);
         ennemy.setHealth(hp);
         if (hp <= 0) {
+
+            Log.e("INFOR", "Duel");
+
             Intent intent = new Intent();
             intent.putExtra("fighter1", fighter1);
             intent.putExtra("ennemy", ennemy);
-            setResult(2, intent);
+            setResult(4, intent);
             //fighter1.isFighting(false);
             finish();
         }

@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e("HEHE", hp + "");
         textView.setText(String.valueOf(hp));
         progressBar.setProgress(hp);
 
@@ -51,16 +50,26 @@ public class MainActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
     }
 
-     @Override
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // check if the request code is same as what is passed  here it is 2
+        Log.e("INFOR", "MainActivityBefore" + requestCode + " " + resultCode );
         if (requestCode == 2) {
+            Log.e("INFOR", "MainActivity");
             Character ennemy = (Character) data.getParcelableExtra("ennemy");
             hp = ennemy.getHealth();
             gameView.setHealth(hp);
         }
-     }
+        /*if(requestCode == 3) {
+            Intent newIntent = new Intent(this, DuelActivity.class);
+            Bundle bundle = getIntent().getExtras();
+            if(bundle == null){
+                Log.e("WHAT", "ahahah");
+            }
+            newIntent.putExtras(getIntent().getExtras());
+            startActivityForResult(newIntent, 2);
+        }*/
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
