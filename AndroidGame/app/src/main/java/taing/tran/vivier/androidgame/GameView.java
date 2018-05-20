@@ -37,6 +37,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Paint transparentPaint;
     private Context context;
     private Activity activity;
+    private float previousXtouch;
+    private float previousYtouch;
+    private int previousEvent;
 
     public GameView(Context context) {
         super(context);
@@ -63,25 +66,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         secondCharacter.setY(500);
         ennemies.add(secondCharacter);
         battlefield = Battlefield.createDefault(this.getContext());
-        transparentPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        transparentPaint.setColor(Color.TRANSPARENT);
-        transparentPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
-        transparentPaint.setAntiAlias(true);
-
-        this.setZOrderOnTop(true);
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            setBackgroundDrawable(battlefield.getBattlefieldImg());
-        } else {
-            setBackground(battlefield.getBattlefieldImg());
-        }
-        getHolder().setFormat(PixelFormat.TRANSPARENT);
     }
 
     public void doDraw(Canvas canvas) {
         if (canvas == null) {
             return;
         }
-        canvas.drawPaint(transparentPaint); // efface la couche précédente sans effacer le background
         battlefield.draw(canvas);
         character.draw(canvas);
         secondCharacter.draw(canvas);
@@ -157,13 +147,38 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            int currentX = (int) event.getX();
-            int currentY = (int) event.getY();
-            int moveX = currentX - character.getX();
-            int moveY = currentY - character.getY();
-            this.character.move(moveX, moveY, currentX, currentY);
+        float x = event.getX();
+        float y = event.getY();
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_UP:
+                if (previousEvent != MotionEvent.ACTION_MOVE) {
+                    int currentX = (int) event.getX();
+                    int currentY = (int) event.getY();
+                    int moveX = currentX - character.getX();
+                    int moveY = currentY - character.getY();
+                    character.move(moveX, moveY, currentX, currentY);
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                int xMove = (int) (x - previousXtouch);
+                int yMove = (int) (y - previousYtouch);
+                // séparation en deux IF pour permettre de bouger dans un un des deux sens même si l'autre sens est illégal
+                if (character.getX() + xMove > 0 && character.getRect().right + xMove < getWidth()) {
+                    battlefield.move(xMove, 0);
+                    character.move(xMove, 0);
+                    secondCharacter.move(xMove, 0);
+                }
+                if (character.getY() + yMove > 0 && character.getRect().bottom + yMove < getHeight()) {
+                    battlefield.move(0, yMove);
+                    character.move(0, yMove);
+                    secondCharacter.move(0, yMove);
+                }
+                break;
         }
+        previousXtouch = x;
+        previousYtouch = y;
+        previousEvent = event.getAction();
         return true;
     }
 

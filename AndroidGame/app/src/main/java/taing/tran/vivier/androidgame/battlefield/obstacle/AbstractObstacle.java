@@ -26,8 +26,15 @@ abstract class AbstractObstacle implements Obstacle {
     public void draw(Canvas canvas) {
         canvas.drawBitmap(obstacleImg, point.x, point.y, null);
         Paint paint = new Paint();
+        /*
         paint.setColor(Color.BLUE);
         canvas.drawRect(rect, paint);
+        */
+    }
+
+    public void move(int xMove, int yMove) {
+        this.point.set(point.x + xMove, point.y + yMove);
+        this.rect.set(point.x , point.y, obstacleImg.getWidth() + point.x, obstacleImg.getHeight() + point.y);
     }
 
     public Rect getRect() {

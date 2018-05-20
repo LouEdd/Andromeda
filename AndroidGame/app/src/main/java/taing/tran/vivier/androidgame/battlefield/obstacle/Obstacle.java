@@ -10,4 +10,5 @@ import android.graphics.Rect;
 public interface Obstacle {
     public void draw(Canvas canvas);
     public Rect getRect();
+    public void move(int xMove, int yMove);
 }

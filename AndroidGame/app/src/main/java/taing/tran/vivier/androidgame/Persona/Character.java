@@ -116,21 +116,6 @@ public class Character implements Parcelable {
 
         rect.set(x, y, width + x, height + y);
 
-        // Pour ne pas sortir de l'écran : A SUPPRIMER AVEC LA MAP
-
-        if(x < 0){
-            x = 0;
-        }else if(x > widthScreen - width){
-            x = widthScreen - width;
-        }
-
-        if(y < 0){
-            y = 0;
-        }else if (y > heightScreen - height){
-            y = heightScreen - height;
-        }
-
-
         // Pour s'arreter ou le player a toucher avec son doigt
         if(x <= targetX && x >= targetX - width){
             moveX = 0;
@@ -152,6 +137,11 @@ public class Character implements Parcelable {
         this.moveY = moveY;
         this.targetX = targetX;
         this.targetY = targetY;
+    }
+
+    public void move(int xMove, int yMove) {
+        this.x += xMove;
+        this.y += yMove;
     }
 
 
@@ -210,8 +200,8 @@ public class Character implements Parcelable {
     }
 
     public void stopMoving() {
-     this.moveX = 0;
-     this.moveY = 0;
+        this.moveX = 0;
+        this.moveY = 0;
     }
 
     public boolean isFighting() {
