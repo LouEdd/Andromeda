@@ -1,7 +1,12 @@
 package taing.tran.vivier.androidgame.Artefact;
 
 
+import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import taing.tran.vivier.androidgame.DuelActivity;
+import taing.tran.vivier.androidgame.R;
 
 public class Weapon extends ArtifactObject{
     public enum WeaponKind {
@@ -19,14 +24,24 @@ public class Weapon extends ArtifactObject{
             this.damage = damage + 1.25*scarcity;
             this.speed = speed;
             this.health = health;
+
         }
     }
 
     private final WeaponKind kind;
 
-    public Weapon(Bitmap image, WeaponKind kind){
-        super(image);
+    public Weapon(Activity activity, WeaponKind kind){
+        super();
         this.kind = kind;
+        if(kind == WeaponKind.Sword) {
+            super.setImage(BitmapFactory.decodeResource(activity.getResources(), R.drawable.sword2));
+        }
+        if(kind == WeaponKind.Dagger) {
+            super.setImage(BitmapFactory.decodeResource(activity.getResources(), R.drawable.knife2));
+        }
+        if(kind == WeaponKind.Spear) {
+            super.setImage(BitmapFactory.decodeResource(activity.getResources(), R.drawable.spear2));
+        }
     }
 
     public int speed() {

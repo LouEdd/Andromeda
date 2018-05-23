@@ -24,7 +24,7 @@ public class Penalty extends ArtifactObject{
     private final PenaltyKind kind;
 
     public Penalty(Bitmap image, PenaltyKind kind) {
-        super(image);
+        super();
         this.kind = kind;
     }
 

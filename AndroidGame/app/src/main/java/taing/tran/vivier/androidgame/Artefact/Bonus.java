@@ -22,7 +22,7 @@ public class Bonus extends ArtifactObject {
     private final BonusKind kind;
 
     public Bonus(Bitmap image, BonusKind kind) {
-        super(image);
+        super();
         this.kind = kind;
     }
 

@@ -23,7 +23,7 @@ public class Shield extends ArtifactObject {
     private final ShieldKind kind;
 
     public Shield(Bitmap image, ShieldKind kind) {
-        super(image);
+        super();
         this.kind = kind;
     }
 

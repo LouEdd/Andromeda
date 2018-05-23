@@ -2,36 +2,32 @@ package taing.tran.vivier.androidgame.Artefact;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Point;
+import android.graphics.Rect;
 
 public abstract class ArtifactObject implements Artifact {
 
     private Bitmap image;
+    private Rect rect;
+    private Point point;
 
-    private static final int MAP_WIDTH = 640;
-    private static final int MAP_HEIGHT = 480;
-    protected float x;
-    protected float y;
-
-    public ArtifactObject(Bitmap image) {
-        this.image = image;
-        this.x = (float) Math.random() * MAP_WIDTH;
-        this.y = (float )Math.random() * MAP_HEIGHT;
-
+    public ArtifactObject() {
     }
 
-    public void drawArtifact(Canvas canvas){
-        canvas.drawBitmap(image, x, y, null);
+    public void setPosition(int x, int y){
+        this.point = new Point(x, y);
+        this.rect = new Rect(x, y, image.getWidth() + x, image.getHeight() + y);
     }
 
-    public float getX() {
-        return x;
+    public void drawArtifact(Canvas canvas) {
+        canvas.drawBitmap(image, point.x, point.y, null);
     }
 
-    public float getY() {
-        return y;
-    }
-
-    public Bitmap getBitmap(){
+    public Bitmap getBitmap() {
         return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
     }
 }

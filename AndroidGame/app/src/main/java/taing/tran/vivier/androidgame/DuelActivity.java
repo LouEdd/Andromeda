@@ -37,11 +37,10 @@ public class DuelActivity extends AppCompatActivity{
 
         final Button button = (Button) findViewById(R.id.buttonDuel);
         final ListView listView = (ListView) findViewById(R.id.artefact_list);
-        Bitmap image = BitmapFactory.decodeResource(getResources(), R.drawable.knife);
 
-        list.add(new Weapon(image, Weapon.WeaponKind.Dagger));
-        list.add(new Weapon(image, Weapon.WeaponKind.Spear));
-        list.add(new Weapon(image, Weapon.WeaponKind.Sword));
+        list.add(new Weapon(this, Weapon.WeaponKind.Dagger));
+        list.add(new Weapon(this, Weapon.WeaponKind.Spear));
+        list.add(new Weapon(this, Weapon.WeaponKind.Sword));
 
         ArtifactAdapter artifactAdapter = new ArtifactAdapter(this, R.layout.listweapon, list);
 
