@@ -58,8 +58,15 @@ public class Battlefield {
         newBf.obstacles.add(SimpleTree.create(200,100, context));
         newBf.obstacles.add(SimpleTree.create(400,300, context));
 
+
         newBf.artifacts.add(RandomBox.create(600, 700, context));
-        //newBf.artifacts.add(RandomBox.create(400, 400, context));
+        newBf.artifacts.add(RandomBox.create(400, 400, context));
+        newBf.artifacts.add(RandomBox.create(700, 200, context));
+        newBf.artifacts.add(RandomBox.create(500, 350, context));
+        newBf.artifacts.add(RandomBox.create(700, 700, context));
+
+        newBf.artifacts.add(RandomBox.createShield(900, 900, context));
+
 
         return newBf;
     }
@@ -103,6 +110,9 @@ public class Battlefield {
         for (Obstacle o : obstacles) {
             o.move(xMove, yMove);
         }
+        for (Artifact a : artifacts) {
+            a.move(xMove, yMove);
+        }
     }
 
     public BitmapDrawable getBattlefieldImg() {
@@ -111,5 +121,12 @@ public class Battlefield {
 
     public List<Obstacle> getObstacles() {
         return Collections.unmodifiableList(obstacles);
+    }
+    public List<Artifact> getArtifacts() {
+        return Collections.unmodifiableList(artifacts);
+    }
+
+    public void removeArtifact(Artifact artifact){
+        artifacts.remove(artifact);
     }
 }

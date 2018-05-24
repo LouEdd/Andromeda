@@ -14,9 +14,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import taing.tran.vivier.androidgame.Artefact.Artifact;
 import taing.tran.vivier.androidgame.Persona.Character;
 import taing.tran.vivier.androidgame.Quizz.Quizz;
 import taing.tran.vivier.androidgame.Quizz.QuizzActivity;
@@ -32,6 +35,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Character character;
     private Character secondCharacter;
     private ArrayList<Character> ennemies;
+    private ArrayList<Artifact> artifacts = new ArrayList<>();
     private SurfaceHolder surfaceHolder;
     private Battlefield battlefield;
     private Paint transparentPaint;
@@ -91,14 +95,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             newIntent.putExtra("fighter1", character);
             newIntent.putExtra("ennemy", secondCharacter);
             activity.startActivityForResult(newIntent, 2);
-*/              Log.e("INFOR", "GameView");
+*/
+                Log.e("INFOR", "GameView");
                 Intent quizzIntent = new Intent(activity, QuizzActivity.class);
                 quizzIntent.putExtra("fighter1", character);
                 quizzIntent.putExtra("ennemy", ennemy);
                 activity.startActivityForResult(quizzIntent, 3);
                 character.stopMoving();
-
-
 
 
             }
@@ -112,6 +115,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 character.stopMoving();
             }
         }
+
+
+        for (Artifact artifact : battlefield.getArtifacts()) {
+            if (Rect.intersects(artifact.getRect(), character.getRect())) {
+                artifacts.add(artifact);
+                String text = artifact.getDescription();
+                //Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
+            }
+        }
+
+        for (Artifact artifact : artifacts) {
+            battlefield.removeArtifact(artifact);
+        }
+
 
     }
 

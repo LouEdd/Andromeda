@@ -44,6 +44,11 @@ public class Weapon extends ArtifactObject{
         }
     }
 
+    @Override
+    public String getDescription() {
+        return null;
+    }
+
     public int speed() {
         return kind.speed;
     }

@@ -28,8 +28,18 @@ public abstract class ArtifactObject implements Artifact {
         canvas.drawBitmap(image, point.x, point.y, null);
     }
 
+    public void move(int xMove, int yMove) {
+        this.point.set(point.x + xMove, point.y + yMove);
+        this.rect.set(point.x , point.y, image.getWidth() + point.x, image.getHeight() + point.y);
+    }
+
+
     public Bitmap getBitmap() {
         return image;
+    }
+
+    public Rect getRect() {
+        return rect;
     }
 
     public void setImage(Bitmap image) {

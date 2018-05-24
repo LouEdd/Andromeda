@@ -26,6 +26,11 @@ public class Bonus extends ArtifactObject {
         this.kind = kind;
     }
 
+    @Override
+    public String getDescription() {
+        return null;
+    }
+
     public int speed() {
         return kind.speed;
     }
