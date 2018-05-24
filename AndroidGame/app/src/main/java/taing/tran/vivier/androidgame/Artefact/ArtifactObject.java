@@ -14,6 +14,11 @@ public abstract class ArtifactObject implements Artifact {
     public ArtifactObject() {
     }
 
+    public ArtifactObject(Bitmap image, int x, int y) {
+        this.image = image;
+        setPosition(x, y);
+    }
+
     public void setPosition(int x, int y){
         this.point = new Point(x, y);
         this.rect = new Rect(x, y, image.getWidth() + x, image.getHeight() + y);

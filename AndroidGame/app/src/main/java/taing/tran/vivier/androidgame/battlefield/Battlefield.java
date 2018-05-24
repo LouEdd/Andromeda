@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import taing.tran.vivier.androidgame.Artefact.Artifact;
+import taing.tran.vivier.androidgame.Artefact.RandomBox;
 import taing.tran.vivier.androidgame.R;
 import taing.tran.vivier.androidgame.battlefield.obstacle.Obstacle;
 import taing.tran.vivier.androidgame.battlefield.obstacle.SimpleTree;
@@ -32,6 +34,7 @@ public class Battlefield {
     private int safeZoneY;
     private int safeZoneRadius;
     private ArrayList<Obstacle> obstacles = new ArrayList<>();
+    private ArrayList<Artifact> artifacts = new ArrayList<>();
     private int canvasHeight;
     private int canvasWidth;
     private Bitmap part;
@@ -54,6 +57,9 @@ public class Battlefield {
         newBf.obstacles.add(SimpleTree.create(100,100, context));
         newBf.obstacles.add(SimpleTree.create(200,100, context));
         newBf.obstacles.add(SimpleTree.create(400,300, context));
+
+        newBf.artifacts.add(RandomBox.create(600, 700, context));
+        //newBf.artifacts.add(RandomBox.create(400, 400, context));
 
         return newBf;
     }
@@ -79,6 +85,9 @@ public class Battlefield {
         }
         for (Obstacle obs : obstacles) {
             obs.draw(canvas);
+        }
+        for (Artifact art : artifacts) {
+            art.drawArtifact(canvas);
         }
     }
 
