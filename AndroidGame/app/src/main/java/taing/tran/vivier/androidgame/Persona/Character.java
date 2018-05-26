@@ -111,29 +111,20 @@ public class Character implements Parcelable {
         if (lastDrawNanoTime == -1) {
             lastDrawNanoTime = now;
         }
-
         int deltaTime = (int) ((now - lastDrawNanoTime) / 1000000);
         float distance = speed * deltaTime;
-
         double moveLength = Math.sqrt(moveX * moveX + moveY * moveY);
         this.x = x + (int) (distance * moveX / moveLength);
         this.y = y + (int) (distance * moveY / moveLength);
 
         rect.set(x, y, width + x, height + y);
-
         // Pour s'arreter ou le player a toucher avec son doigt
         if(x <= targetX && x >= targetX - width){
             moveX = 0;
         }
-
         if(y <= targetY && y >= targetY - height){
             moveY = 0;
         }
-
-
-
-
-
     }
 
 
@@ -254,5 +245,13 @@ public class Character implements Parcelable {
 
     public void addInventory(Artifact artifact){
         inventory.add(Objects.requireNonNull(artifact));
+    }
+
+    public void moveIA(int playerX, int playerY) {
+        if(!isIA()){
+            return;
+        }
+        speed = 0.1f;
+        move(playerX - x, playerY - y, playerX, playerY);
     }
 }

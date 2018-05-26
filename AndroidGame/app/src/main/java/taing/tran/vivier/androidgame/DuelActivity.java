@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import taing.tran.vivier.androidgame.Artefact.Artifact;
 import taing.tran.vivier.androidgame.Artefact.ArtifactAdapter;
@@ -63,6 +64,8 @@ public class DuelActivity extends AppCompatActivity{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 artefact1 = (Artifact) adapterView.getItemAtPosition(i);
+                Collections.shuffle(list);
+                artefact2 = list.get(0);
             }
         });
     }
@@ -75,6 +78,7 @@ public class DuelActivity extends AppCompatActivity{
             if(hp2 <= 0) {
                 Log.i(getClass().getName(), "onClickButtonDuel: Fighter 2 died");
                 players.remove(indexFighter2);
+                players.get(indexFighter1).isFighting(false);
                 Intent intent = new Intent();
                 intent.putParcelableArrayListExtra("players", players);
                 setResult(4, intent);
@@ -83,14 +87,14 @@ public class DuelActivity extends AppCompatActivity{
         }
         if(artefact2 != null) {
             hp1 -= artefact2.damage();
-            pbFighter2.setProgress(hp2);
+            pbFighter1.setProgress(hp1);
             players.get(indexFighter1).setHealth(hp1);
             if (hp1 <= 0) {
                 Log.i(getClass().getName(), "onClickButtonDuel: Fighter 1 died");
                 players.remove(indexFighter1);
                 Intent intent = new Intent();
                 intent.putParcelableArrayListExtra("players", players);
-                setResult(4, intent);
+                setResult(5, intent);
                 finish();
             }
         }
