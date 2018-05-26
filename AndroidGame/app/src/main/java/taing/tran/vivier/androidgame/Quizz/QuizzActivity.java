@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.List;
 
 import taing.tran.vivier.androidgame.DuelActivity;
-import taing.tran.vivier.androidgame.Quizz.Quizz;
 import taing.tran.vivier.androidgame.R;
 
 public class QuizzActivity extends AppCompatActivity {
@@ -80,11 +79,18 @@ public class QuizzActivity extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
             success = 0;
         }
-        Intent duelIntent = new Intent(this, DuelActivity.class);
-        duelIntent.putExtra("bonus", success);
-        duelIntent.putExtras(getIntent().getExtras());
-        startActivityForResult(duelIntent, 4);
-        //finish();
+
+
+
+        Log.e("INFOR", "Quizz");
+        Intent intent = new Intent(this, DuelActivity.class);
+        intent.putExtra("bonus", success);
+        intent.putExtras(getIntent().getExtras());
+        Log.d("COUCOU", getIntent().getExtras().toString());
+
+        startActivityForResult(intent, 4);
+        finish();
+
     }
 
     private List<String> getOneRandomAsset() {
@@ -112,10 +118,12 @@ public class QuizzActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == 4){
-            Log.d(getClass().getName(), "onActivityResult: data players = " + data.getParcelableArrayListExtra("players"));
+        Log.e("INFOR", "QuizzBefore " + requestCode + " "  + resultCode);
+        if(requestCode == 4){
+            Log.e("INFOR", "Quizz Result");
             setResult(2, data);
             finish();
+
         }
     }
 
