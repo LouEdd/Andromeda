@@ -18,6 +18,7 @@ import java.util.List;
 
 import taing.tran.vivier.androidgame.Artefact.Artifact;
 import taing.tran.vivier.androidgame.Persona.Character;
+import taing.tran.vivier.androidgame.Persona.Segment;
 import taing.tran.vivier.androidgame.Quizz.QuizzActivity;
 import taing.tran.vivier.androidgame.battlefield.Battlefield;
 import taing.tran.vivier.androidgame.battlefield.obstacle.Obstacle;
@@ -27,10 +28,8 @@ import taing.tran.vivier.androidgame.battlefield.obstacle.Obstacle;
  */
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
-    public static final int NUMBER_OF_IA = 1;
+    public static final int NUMBER_OF_IA = 5;
     private GameThread gameThread;
-    //private Character character;
-    //private Character secondCharacter;
     private ArrayList<Character> players;   // first is the player, others are IA
     private ArrayList<Artifact> artifacts = new ArrayList<>();
     private SurfaceHolder surfaceHolder;
@@ -42,6 +41,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private float previousYtouch;
     private int previousEvent;
     private boolean firstDraw = true;
+    private int currentX;
+    private int currentY;
+    private boolean canMove = true;
+
+
 
     public GameView(Context context) {
         super(context);
@@ -60,10 +64,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private void init() {
-        //character = new Character(this.getContext());
-        //secondCharacter = new Character(this.getContext());
-        //secondCharacter.setX(500);
-        //secondCharacter.setY(500);
+
         Log.i(getClass().getName(), "init: Génération du personnage principal");
         Character mainPlayer = new Character(this.getContext(), false);
         mainPlayer.setX(1000);
@@ -72,10 +73,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         List<Character> iaPlayers = new ArrayList<>(NUMBER_OF_IA);
         for(int i=0; i<NUMBER_OF_IA; i++) {
             Character ia = new Character(this.getContext(), true);
-            //ia.setX((int)(Math.random()%500) - 1000);
-            //ia.setY((int)(Math.random()%500) - 1000);
-            ia.setX(500);
-            ia.setY(500);
+            ia.setX((int)(Math.random()* 1000) );
+            ia.setY((int)(Math.random()* 1000));
             iaPlayers.add(ia);
         }
         // Remplissage de la table des joueurs
@@ -90,7 +89,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if (canvas == null) {
             return;
         }
-
         battlefield.draw(canvas);
         for(Character p : players) {
             p.draw(canvas);
@@ -104,8 +102,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             }
             firstDraw = false;
         }
-        //character.draw(canvas);
-        //secondCharacter.draw(canvas);
     }
 
     public void update() {
@@ -128,8 +124,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             }
             p.update();
         }
-        //this.character.update();
-        //this.secondCharacter.update();
 
         for (int i=1; i<players.size(); i++) {
             if (Rect.intersects(players.get(0).getRect(), players.get(i).getRect()) && !players.get(0).isFighting()) {
@@ -138,20 +132,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 players.get(i).stopMoving();
                 players.get(0).isFighting(true);
                 players.get(i).isFighting(true);
-/*
-            Intent newIntent = new Intent(activity, DuelActivity.class);
-            newIntent.putExtra("fighter1", character);
-            newIntent.putExtra("ennemy", secondCharacter);
-            activity.startActivityForResult(newIntent, 2);
-*/
+
                 Intent quizzIntent = new Intent(activity, QuizzActivity.class);
                 quizzIntent.putParcelableArrayListExtra("players", players);
                 quizzIntent.putExtra("indexFighter1", 0);
                 quizzIntent.putExtra("indexFighter2", i);
-                //quizzIntent.putExtra("fighter1", character);
-                //quizzIntent.putExtra("ennemy", ennemy);
                 activity.startActivityForResult(quizzIntent, 3);
-                //character.stopMoving();
             }
         }
 
@@ -190,8 +176,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         for(Character p : players) {
             p.resize(i1, i2);
         }
-        //character.resize(i1, i2);
-        //secondCharacter.resize(i1, i2);
     }
 
     @Override
@@ -220,7 +204,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     int currentY = (int) event.getY();
                     int moveX = currentX - players.get(0).getX();
                     int moveY = currentY - players.get(0).getY();
-                    players.get(0).move(moveX, moveY, currentX, currentY);
+
+
+                    for (Obstacle obstacle : battlefield.getObstacles()) {
+                        if(checkObstacle(currentX, currentY, players.get(0).getX(), players.get(0).getY(), obstacle.getRect())){
+                            canMove = false;
+                        }
+                    }
+
+                    if(canMove){
+                        players.get(0).move(moveX, moveY, currentX, currentY);
+                    }
+                    canMove = true;
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -232,16 +227,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     for(Character p : players) {
                         p.move(xMove, 0);
                     }
-                    //character.move(xMove, 0);
-                    //secondCharacter.move(xMove, 0);
+
                 }
                 if (players.get(0).getY() + yMove > 0 && players.get(0).getRect().bottom + yMove < getHeight()) {
                     battlefield.move(0, yMove);
                     for(Character p : players) {
                         p.move(0, yMove);
                     }
-                    //character.move(0, yMove);
-                    //secondCharacter.move(0, yMove);
+
                 }
                 break;
         }
@@ -249,6 +242,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         previousYtouch = y;
         previousEvent = event.getAction();
         return true;
+    }
+
+
+    private boolean checkObstacle(int destX, int destY, int startX, int startY, Rect rect){
+        Segment segment = new Segment(startX, startY, destX, destY);
+        Log.i("HOPE", Segment.intersects2(segment, rect) + "");
+        return  Segment.intersects2(segment, rect);
     }
 
 
