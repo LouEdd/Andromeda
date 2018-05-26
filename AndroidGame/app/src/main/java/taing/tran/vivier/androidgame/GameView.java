@@ -98,6 +98,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if(players == null) {
             return;
         }
+        battlefield.reduceSafeZone();
         Iterator<Character> it = players.iterator();
         Character p;
         while(it.hasNext()) {

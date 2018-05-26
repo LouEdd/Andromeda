@@ -6,6 +6,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Rect;
+import android.graphics.Region;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 
@@ -24,12 +27,15 @@ import taing.tran.vivier.androidgame.battlefield.obstacle.SimpleTree;
  */
 
 public class Battlefield {
-    private static final int DEFAULT_RADIUS = 8000;
+    private static final int DEFAULT_RADIUS = 16000;
 
     private int x;
     private int y;
     private final int radius;
     private final BitmapDrawable battlefieldImg;
+    private final Bitmap unsafeZone;
+    private final Bitmap safeZone;
+    private final Rect safeRect;
     private int safeZoneX;
     private int safeZoneY;
     private int safeZoneRadius;
@@ -39,20 +45,27 @@ public class Battlefield {
     private int canvasWidth;
     private Bitmap part;
     private Paint paint = new Paint();
+    private Paint unsafeZonePaint = new Paint();
+    private Path circlePath = new Path();
     private Bitmap scaled;
 
-    private Battlefield(int radius, BitmapDrawable battlefieldImg) {
+    private Battlefield(int radius, BitmapDrawable battlefieldImg, Bitmap unsafeZone, Bitmap safeZone) {
         this.safeZoneRadius = this.radius = radius;
         this.safeZoneX = this.x = 0;
         this.safeZoneY = this.y = 0;
         this.battlefieldImg = battlefieldImg;
+        this.unsafeZone = unsafeZone;
+        this.safeZone = safeZone;
+        this.safeRect = new Rect(0-safeZone.getWidth()/2, 0-safeZone.getHeight()/2, 0+safeZone.getWidth()/2, 0+safeZone.getHeight()/2);
     }
 
     public static Battlefield createDefault(Context context) {
         Bitmap tmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.field_texture_grass);
         BitmapDrawable battlefieldImg = new BitmapDrawable(context.getResources(), tmp);
+        Bitmap unsafeZone = BitmapFactory.decodeResource(context.getResources(), R.drawable.field_texture_lava);
         battlefieldImg.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        Battlefield newBf = new Battlefield(DEFAULT_RADIUS, battlefieldImg);
+        Bitmap safeZone = BitmapFactory.decodeResource(context.getResources(), R.drawable.field_texture_safezone);
+        Battlefield newBf = new Battlefield(DEFAULT_RADIUS, battlefieldImg, unsafeZone, safeZone);
 
         newBf.obstacles.add(SimpleTree.create(100,100, context));
         newBf.obstacles.add(SimpleTree.create(200,100, context));
@@ -80,6 +93,8 @@ public class Battlefield {
         this.scaled = Bitmap.createScaledBitmap(battlefieldImg.getBitmap(), canvasWidth*2, canvasHeight*2,  false);
         this.part = Bitmap.createBitmap(scaled, x%canvasWidth, y%canvasHeight, canvasWidth, canvasHeight);
         this.paint.setShader(new BitmapShader(part, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT));
+        this.unsafeZonePaint.setShader(new BitmapShader(unsafeZone, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT));
+        this.circlePath.addCircle(0, 0, radius, Path.Direction.CCW);
     }
 
     public void draw(Canvas canvas) {
@@ -96,11 +111,21 @@ public class Battlefield {
         for (Artifact art : artifacts) {
             art.drawArtifact(canvas);
         }
+        canvas.save();
+        circlePath.rewind();
+        this.circlePath.addCircle(safeZoneX, safeZoneY, safeZoneRadius, Path.Direction.CCW);
+        canvas.clipPath(circlePath, Region.Op.DIFFERENCE);
+        canvas.drawPaint(unsafeZonePaint);
+        canvas.restore();
+        canvas.drawBitmap(safeZone, safeRect.left, safeRect.top, null);
     }
 
     public void move(int xMove, int yMove) {
         this.part = Bitmap.createBitmap(scaled, x%canvasWidth, y%canvasHeight, canvasWidth, canvasHeight);
         this.paint.setShader(new BitmapShader(part, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT));
+        safeZoneX += xMove;
+        safeZoneY += yMove;
+        safeRect.set(safeRect.left+xMove, safeRect.top+yMove, safeRect.right+xMove, safeRect.bottom+yMove);
         if((this.x -= xMove) < 0) {
             this.x = canvasWidth;
         }
@@ -128,5 +153,11 @@ public class Battlefield {
 
     public void removeArtifact(Artifact artifact){
         artifacts.remove(artifact);
+    }
+
+    public void reduceSafeZone() {
+        if(this.safeZoneRadius > 0) {
+            this.safeZoneRadius -= 1;
+        }
     }
 }
