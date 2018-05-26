@@ -1,5 +1,6 @@
 package taing.tran.vivier.androidgame;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -34,4 +35,13 @@ public class GameOverActivity extends AppCompatActivity {
         }
         endTextView.setText(message);
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MenuActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+
 }

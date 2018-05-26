@@ -87,14 +87,14 @@ public class DuelActivity extends AppCompatActivity{
         }
         if(artefact2 != null) {
             hp1 -= artefact2.damage();
-            pbFighter2.setProgress(hp1);
+            pbFighter1.setProgress(hp1);
             players.get(indexFighter1).setHealth(hp1);
             if (hp1 <= 0) {
                 Log.i(getClass().getName(), "onClickButtonDuel: Fighter 1 died");
                 players.remove(indexFighter1);
                 Intent intent = new Intent();
                 intent.putParcelableArrayListExtra("players", players);
-                setResult(4, intent);
+                setResult(5, intent);
                 finish();
             }
         }

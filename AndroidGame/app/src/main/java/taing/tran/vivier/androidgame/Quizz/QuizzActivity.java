@@ -117,6 +117,12 @@ public class QuizzActivity extends AppCompatActivity {
             setResult(2, data);
             finish();
         }
+        if(resultCode == 5){
+            setResult(3, data);
+            finish();
+        }
+
+
     }
 
     private List<String> getAssetsList() throws IOException {

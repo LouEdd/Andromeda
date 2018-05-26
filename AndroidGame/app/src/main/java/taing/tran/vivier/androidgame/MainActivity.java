@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.textViewHP);
         gameView = (GameView) findViewById(R.id.gameView);
         textView.setTextColor(Color.BLACK);
-        //hp = gameView.getHealth();
-        //textView.setText(String.valueOf(hp));
         hp = gameView.getHealth();
         textView.setText(String.valueOf(hp));
         progressBar.setProgress(hp);
@@ -58,28 +56,19 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 2) {
             Log.d(getClass().getName(), "onActivityResult: Quizz/DuelActivity result ok");
-            /*
-            Character ennemy = (Character) data.getParcelableExtra("ennemy");
-            hp = ennemy.getHealth();
-            gameView.setHealth(hp);
-            */
+
             ArrayList<Character> players = data.getParcelableArrayListExtra("players");
-            if(players.get(0).isIA()) {
+            if (players.get(0).isIA()) {
                 gameView.processEnd(false);
                 return;
             }
             gameView.setPlayers(players);
             gameView.setHealth(players.get(0).getHealth());
         }
-        /*if(requestCode == 3) {
-            Intent newIntent = new Intent(this, DuelActivity.class);
-            Bundle bundle = getIntent().getExtras();
-            if(bundle == null){
-                Log.e("WHAT", "ahahah");
-            }
-            newIntent.putExtras(getIntent().getExtras());
-            startActivityForResult(newIntent, 2);
-        }*/
+        if(resultCode == 3){
+            gameView.processEnd(false);
+            return;
+        }
     }
 
     @Override
