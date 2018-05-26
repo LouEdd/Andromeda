@@ -24,8 +24,6 @@ public class DuelActivity extends AppCompatActivity{
     private ArrayList<Character> players;
     private int indexFighter1;
     private int indexFighter2;
-    //private Character fighter1;
-    //private Character ennemy;
     private ProgressBar pbFighter1;
     private ProgressBar pbFighter2;
     private Artifact artefact1;
@@ -46,9 +44,21 @@ public class DuelActivity extends AppCompatActivity{
         list.add(new Weapon(this, Weapon.WeaponKind.Spear));
         list.add(new Weapon(this, Weapon.WeaponKind.Sword));
 
-        ArtifactAdapter artifactAdapter = new ArtifactAdapter(this, R.layout.listweapon, list);
+        Intent intent = getIntent();
+        players = intent.getParcelableArrayListExtra("players");
+        indexFighter1 = intent.getIntExtra("indexFighter1", -1);
+        indexFighter2 = intent.getIntExtra("indexFighter2", -1);
+        if(indexFighter1 == -1 || indexFighter2 == -1) {
+            onBackPressed();
+        }
+        hp1 = players.get(indexFighter1).getHealth();
+        hp2 = players.get(indexFighter2).getHealth();
+        pbFighter1.setProgress(hp1);
+        pbFighter2.setProgress(hp2);
 
-        //ArrayAdapter<Artifact> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
+
+        ArtifactAdapter artifactAdapter = new ArtifactAdapter(this, R.layout.listweapon,
+                players.get(indexFighter1).getInventory());
         listView.setAdapter(artifactAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -57,21 +67,6 @@ public class DuelActivity extends AppCompatActivity{
                 artefact1 = (Artifact) adapterView.getItemAtPosition(i);
             }
         });
-
-        Intent intent = getIntent();
-        players = intent.getParcelableArrayListExtra("players");
-        //fighter1 = ((Character) intent.getParcelableExtra("fighter1"));
-        //ennemy = (Character) intent.getParcelableExtra("ennemy");
-        indexFighter1 = intent.getIntExtra("indexFighter1", -1);
-        indexFighter2 = intent.getIntExtra("indexFighter2", -1);
-        if(indexFighter1 == -1 || indexFighter2 == -1) {
-            onBackPressed();
-        }
-        hp1 = players.get(indexFighter1).getHealth();
-        hp2 = players.get(indexFighter2).getHealth();
-        //hp = intent.getIntExtra("hp", 0);
-        pbFighter1.setProgress(hp1);
-        pbFighter2.setProgress(hp2);
     }
 
     public void onClickButtonDuel(View view) {
@@ -101,18 +96,6 @@ public class DuelActivity extends AppCompatActivity{
                 finish();
             }
         }
-        /*
-        if (hp <= 0) {
-
-            Log.e("INFOR", "Duel");
-
-            Intent intent = new Intent();
-            intent.putExtra("fighter1", fighter1);
-            intent.putExtra("ennemy", ennemy);
-            setResult(4, intent);
-            //fighter1.isFighting(false);
-            finish();
-        }*/
     }
 
     @Override

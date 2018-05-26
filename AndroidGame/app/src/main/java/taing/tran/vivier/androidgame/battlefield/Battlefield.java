@@ -28,6 +28,7 @@ import taing.tran.vivier.androidgame.battlefield.obstacle.SimpleTree;
 
 public class Battlefield {
     private static final int DEFAULT_RADIUS = 16000;
+    private static final int NUMBER_OBSTACLES = 200;
 
     private int x;
     private int y;
@@ -67,18 +68,23 @@ public class Battlefield {
         Bitmap safeZone = BitmapFactory.decodeResource(context.getResources(), R.drawable.field_texture_safezone);
         Battlefield newBf = new Battlefield(DEFAULT_RADIUS, battlefieldImg, unsafeZone, safeZone);
 
-        newBf.obstacles.add(SimpleTree.create(100,100, context));
-        newBf.obstacles.add(SimpleTree.create(200,100, context));
-        newBf.obstacles.add(SimpleTree.create(400,300, context));
+        for(int i = 0; i < NUMBER_OBSTACLES; i++){
+            newBf.obstacles.add(SimpleTree.create((int) (Math.random() * DEFAULT_RADIUS/2),(int) (Math.random() * DEFAULT_RADIUS/2), context));
+        }
 
 
-        newBf.artifacts.add(RandomBox.create(600, 700, context));
+       /* newBf.artifacts.add(RandomBox.create(600, 700, context));
         newBf.artifacts.add(RandomBox.create(400, 400, context));
         newBf.artifacts.add(RandomBox.create(700, 200, context));
         newBf.artifacts.add(RandomBox.create(500, 350, context));
         newBf.artifacts.add(RandomBox.create(700, 700, context));
+*/
 
-        newBf.artifacts.add(RandomBox.createShield(900, 900, context));
+        newBf.artifacts.add(RandomBox.createShield(100, 100, context));
+        newBf.artifacts.add(RandomBox.createShield(400, 400, context));
+        newBf.artifacts.add(RandomBox.createShield(500, 500, context));
+        newBf.artifacts.add(RandomBox.createShield(700, 200, context));
+        newBf.artifacts.add(RandomBox.createShield(700, 700, context));
 
 
         return newBf;

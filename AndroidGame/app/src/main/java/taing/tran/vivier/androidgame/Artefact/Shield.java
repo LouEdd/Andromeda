@@ -1,15 +1,46 @@
 package taing.tran.vivier.androidgame.Artefact;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import taing.tran.vivier.androidgame.R;
 
-public class Shield extends ArtifactObject {
+public class Shield extends ArtifactObject implements Parcelable {
+    protected Shield(Parcel in) {
+        //this.kind = ShieldKind.valueOf(in.readString());
+        kind = (ShieldKind) in.readValue(ShieldKind.class.getClassLoader());
+    }
+
+    public static final Creator<Shield> CREATOR = new Creator<Shield>() {
+        @Override
+        public Shield createFromParcel(Parcel in) {
+            return new Shield(in);
+        }
+
+        @Override
+        public Shield[] newArray(int size) {
+            return new Shield[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        //parcel.writeSerializable(kind);
+        parcel.writeValue(kind);
+    }
+
     public enum ShieldKind {
-        TornyShield(0, 5, 5),
-        ValkyrjaShield(0, 2, 10),
-        StoneBuckler(3, -5, 15),
+        TORNYSHIELD(0, 5, 5),
+        VALKYRJASHIELD(0, 2, 10),
+        STONEBUCKLER(3, -5, 15),
         ;
 
         final double damage;
@@ -26,17 +57,17 @@ public class Shield extends ArtifactObject {
 
     private final ShieldKind kind;
 
-    public Shield(Activity activity, ShieldKind kind) {
+    public Shield(Context context, ShieldKind kind) {
         super();
         this.kind = kind;
-        if(kind == ShieldKind.ValkyrjaShield) {
-            super.setImage(BitmapFactory.decodeResource(activity.getResources(), R.drawable.valkyrjashield));
+        if(kind == ShieldKind.VALKYRJASHIELD) {
+            super.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.valkyrjashield));
         }
-        if(kind == ShieldKind.StoneBuckler) {
-            super.setImage(BitmapFactory.decodeResource(activity.getResources(), R.drawable.stonebuckler));
+        if(kind == ShieldKind.STONEBUCKLER) {
+            super.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.stonebuckler));
         }
-        if(kind == ShieldKind.TornyShield) {
-            super.setImage(BitmapFactory.decodeResource(activity.getResources(), R.drawable.tornyshield));
+        if(kind == ShieldKind.TORNYSHIELD) {
+            super.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.tornyshield));
         }
     }
     public Shield(ShieldKind kind){
@@ -46,9 +77,7 @@ public class Shield extends ArtifactObject {
 
     @Override
     public String getDescription() {
-        if(this.equals(ShieldKind.StoneBuckler))
-            return "Stone Buckler : " + " speed : " + this.speed() + " health : " + this.health() + " damage : " + this.damage();
-        return "";
+        return this.kind.name + " : " + " speed : " + this.speed() + " health : " + this.health() + " damage : " + this.damage();
     }
 
     public int speed() {

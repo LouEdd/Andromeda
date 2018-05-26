@@ -140,17 +140,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 activity.startActivityForResult(quizzIntent, 3);
             }
         }
-
+/*
         for (Obstacle obstacle : battlefield.getObstacles()) {
             if (Rect.intersects(obstacle.getRect(), players.get(0).getRect())) {
                 players.get(0).stopMoving();
             }
         }
-
+*/
 
         for (Artifact artifact : battlefield.getArtifacts()) {
             if (Rect.intersects(artifact.getRect(), players.get(0).getRect())) {
                 artifacts.add(artifact);
+                players.get(0).addInventory(artifact);
                 String text = artifact.getDescription();
                 //Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
             }

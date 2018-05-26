@@ -14,6 +14,7 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import taing.tran.vivier.androidgame.Artefact.Artifact;
 import taing.tran.vivier.androidgame.R;
@@ -76,7 +77,8 @@ public class Character implements Parcelable {
         damage = in.readInt();
         rect = in.readParcelable(Rect.class.getClassLoader());
         fighting = in.readByte() != 0;
-        inventory = in.readArrayList(null);
+        inventory = in.readArrayList( Artifact.class.getClassLoader());
+
 
     }
 
@@ -244,5 +246,13 @@ public class Character implements Parcelable {
 
     public boolean isIA() {
         return this.ia;
+    }
+
+    public ArrayList<Artifact> getInventory() {
+        return inventory;
+    }
+
+    public void addInventory(Artifact artifact){
+        inventory.add(Objects.requireNonNull(artifact));
     }
 }
