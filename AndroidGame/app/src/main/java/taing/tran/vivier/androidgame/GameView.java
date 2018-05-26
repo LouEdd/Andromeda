@@ -65,7 +65,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private void init() {
-
         Log.i(getClass().getName(), "init: Génération du personnage principal");
         Character mainPlayer = new Character(this.getContext(), false);
         mainPlayer.addInventory(new Weapon(this.activity, Weapon.WeaponKind.Dagger));
@@ -75,7 +74,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         List<Character> iaPlayers = new ArrayList<>(NUMBER_OF_IA);
         for(int i=0; i<NUMBER_OF_IA; i++) {
             Character ia = new Character(this.getContext(), true);
-            ia.setX((int)(Math.random()* 1000) );
+            ia.setX((int)(Math.random()* 1000));
             ia.setY((int)(Math.random()* 1000));
             iaPlayers.add(ia);
         }
@@ -110,6 +109,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if(players == null) {
             return;
         }
+
         if((players.size() == 1 && !players.get(0).isIA()) || battlefield.safeRect().contains(players.get(0).getRect())) {
             Log.d(getClass().getName(), "update: rectSafe = " + battlefield.safeRect());
             Log.d(getClass().getName(), "update: rectPlay = " + players.get(0).getRect());
@@ -128,6 +128,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         for (int i=1; i<players.size(); i++) {
+
+            if(players.get(0).isFighting()){
+                players.get(i).stopMoving();
+
+            }
+            else{
+                players.get(i).moveIA(players.get(0).getX(), players.get(0).getY());
+            }
+
+
             if (Rect.intersects(players.get(0).getRect(), players.get(i).getRect()) && !players.get(0).isFighting()) {
                 Log.i(getClass().getName(), "update: collision detected");
                 players.get(0).stopMoving();
@@ -142,6 +152,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 activity.startActivityForResult(quizzIntent, 3);
             }
         }
+
 /*
         for (Obstacle obstacle : battlefield.getObstacles()) {
             if (Rect.intersects(obstacle.getRect(), players.get(0).getRect())) {
@@ -162,6 +173,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         for (Artifact artifact : artifacts) {
             battlefield.removeArtifact(artifact);
         }
+
     }
 
 

@@ -43,7 +43,8 @@ public class RandomBox extends ArtifactObject implements Parcelable{
     };
 
     public static RandomBox createShield(int x, int y, Context context){
-        Bitmap image = BitmapFactory.decodeResource(context.getResources(), R.drawable.treasure);
+        Bitmap image = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.treasure), 100, 150, false);
+
         Shield shield = new Shield(context, Shield.ShieldKind.values()[new Random().nextInt(Shield.ShieldKind.values().length)]);
         return new RandomBox(image, x, y, shield);
     }
