@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,6 +41,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private float previousXtouch;
     private float previousYtouch;
     private int previousEvent;
+    private boolean firstDraw = true;
 
     public GameView(Context context) {
         super(context);
@@ -63,11 +65,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         //secondCharacter.setX(500);
         //secondCharacter.setY(500);
         Log.i(getClass().getName(), "init: Génération du personnage principal");
-        Character mainPlayer = new Character(this.getContext());
+        Character mainPlayer = new Character(this.getContext(), false);
+        mainPlayer.setX(1000);
+        mainPlayer.setY(1000);
         Log.i(getClass().getName(), "init: Génération des IA");
         List<Character> iaPlayers = new ArrayList<>(NUMBER_OF_IA);
         for(int i=0; i<NUMBER_OF_IA; i++) {
-            Character ia = new Character(this.getContext());
+            Character ia = new Character(this.getContext(), true);
             //ia.setX((int)(Math.random()%500) - 1000);
             //ia.setY((int)(Math.random()%500) - 1000);
             ia.setX(500);
@@ -86,9 +90,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if (canvas == null) {
             return;
         }
+
         battlefield.draw(canvas);
         for(Character p : players) {
             p.draw(canvas);
+        }
+        if(firstDraw) {
+            // Centrer la caméra au début
+            Log.d(getClass().getName(), "doDraw: centrage caméra");
+            battlefield.move(-players.get(0).getX(), -players.get(0).getY());
+            for(Character p : players) {
+                p.move(-players.get(0).getX(), -players.get(0).getY());
+            }
+            firstDraw = false;
         }
         //character.draw(canvas);
         //secondCharacter.draw(canvas);
@@ -97,6 +111,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void update() {
         if(players == null) {
             return;
+        }
+        if((players.size() == 1 && !players.get(0).isIA()) || battlefield.safeRect().contains(players.get(0).getRect())) {
+            Log.d(getClass().getName(), "update: rectSafe = " + battlefield.safeRect());
+            Log.d(getClass().getName(), "update: rectPlay = " + players.get(0).getRect());
+
+            processEnd(true);
         }
         battlefield.reduceSafeZone();
         Iterator<Character> it = players.iterator();
@@ -250,5 +270,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void setPlayers(ArrayList<Character> players) {
         this.players = players;
+    }
+
+    void processEnd(boolean win) {
+        Log.d(getClass().getName(), "processEnd: launch GameOverActivity");
+        Intent endIntent = new Intent(activity, GameOverActivity.class);
+        endIntent.putExtra("win", win);
+        activity.startActivity(endIntent);
+        gameThread.setRunning(false);
     }
 }

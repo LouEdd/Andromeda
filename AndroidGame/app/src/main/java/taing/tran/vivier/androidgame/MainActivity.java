@@ -64,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
             gameView.setHealth(hp);
             */
             ArrayList<Character> players = data.getParcelableArrayListExtra("players");
+            if(players.get(0).isIA()) {
+                gameView.processEnd(false);
+                return;
+            }
             gameView.setPlayers(players);
             gameView.setHealth(players.get(0).getHealth());
         }

@@ -160,4 +160,8 @@ public class Battlefield {
             this.safeZoneRadius -= 1;
         }
     }
+
+    public Rect safeRect() {
+        return this.safeRect;
+    }
 }

@@ -43,9 +43,10 @@ public class Character implements Parcelable {
     //private final Paint paint;
     private Rect rect;
     private boolean fighting;
+    private boolean ia;
 
 
-    public Character(Context context){
+    public Character(Context context, boolean ia){
         //this.context = context;
         this.x = 10;
         this.y = 10;
@@ -53,7 +54,9 @@ public class Character implements Parcelable {
         this.damage = 10;
         this.inventory = new ArrayList<>();
         //this.paint = new Paint();
-        this.rect = new Rect(0, 0, 0, 0);
+        this.rect = new Rect(x, y, width + x, height + y);
+        this.ia = ia;
+
     }
 
     protected Character(Parcel in) {
@@ -142,6 +145,7 @@ public class Character implements Parcelable {
     public void move(int xMove, int yMove) {
         this.x += xMove;
         this.y += yMove;
+        this.rect.set(x, y, width + x, height + y);
     }
 
 
@@ -182,13 +186,13 @@ public class Character implements Parcelable {
 
     public void setY(int y) {
         this.y = y;
+        this.rect.set(x, y, width + x, height + y);
     }
 
     public void setX(int x) {
         this.x = x;
+        this.rect.set(x, y, width + x, height + y);
     }
-
-
 
     public void setHealth(int health) {
         this.health = health;
@@ -236,5 +240,9 @@ public class Character implements Parcelable {
         dest.writeParcelable(rect, flags);
         dest.writeByte((byte) (fighting ? 1 : 0));
         dest.writeList(inventory);
+    }
+
+    public boolean isIA() {
+        return this.ia;
     }
 }
