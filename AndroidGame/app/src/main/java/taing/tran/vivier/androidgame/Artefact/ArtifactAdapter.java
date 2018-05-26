@@ -17,7 +17,7 @@ import taing.tran.vivier.androidgame.R;
  */
 
 public class ArtifactAdapter extends ArrayAdapter<Artifact> {
-    private ArrayList<Artifact> list = new ArrayList<>();
+    private ArrayList<Artifact> list;
     private Context context;
 
     public ArtifactAdapter(Context context, int resource, ArrayList<Artifact> list) {
@@ -35,7 +35,7 @@ public class ArtifactAdapter extends ArrayAdapter<Artifact> {
         TextView textView = (TextView) convertView.findViewById(R.id.list_weapon_text);
         ImageView imageView = (ImageView) convertView.findViewById(R.id.list_weapon_image);
 
-        textView.setText(artifact.toString());
+        textView.setText(artifact.getDescription());
         imageView.setImageBitmap(artifact.getBitmap());
 
 

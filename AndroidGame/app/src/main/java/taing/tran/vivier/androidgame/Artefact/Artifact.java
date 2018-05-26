@@ -5,12 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 public interface Artifact {
-    public Bitmap getBitmap();
-    public void drawArtifact(Canvas canvas);
-    public void move(int xMove, int yMove);
-    public Rect getRect();
-    public String getDescription();
-    public int speed();
-    public int health();
-    public double damage();
+     Bitmap getBitmap();
+     void drawArtifact(Canvas canvas);
+     void move(int xMove, int yMove);
+     Rect getRect();
+     String getDescription();
+     int speed();
+     int health();
+     double damage();
+     Artifact getArtifact();
 }

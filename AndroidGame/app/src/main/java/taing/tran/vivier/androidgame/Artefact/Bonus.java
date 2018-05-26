@@ -43,6 +43,11 @@ public class Bonus extends ArtifactObject {
         return kind.damage;
     }
 
+    @Override
+    public Artifact getArtifact() {
+        return this;
+    }
+
     public BonusKind kind() {
         return kind;
     }

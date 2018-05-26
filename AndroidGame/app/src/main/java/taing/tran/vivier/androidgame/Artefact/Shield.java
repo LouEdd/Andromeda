@@ -2,6 +2,7 @@ package taing.tran.vivier.androidgame.Artefact;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -38,15 +39,14 @@ public class Shield extends ArtifactObject implements Parcelable {
     }
 
     public enum ShieldKind {
-        TORNYSHIELD(0, 5, 5),
-        VALKYRJASHIELD(0, 2, 10),
+        TORNYSHIELD(1, 5, 5),
+        VALKYRJASHIELD(1, 2, 10),
         STONEBUCKLER(3, -5, 15),
         ;
 
         final double damage;
         final int health;
         final int speed;
-        String name;
 
         private ShieldKind(double damage, int speed, int health) {
             this.damage = damage;
@@ -56,18 +56,22 @@ public class Shield extends ArtifactObject implements Parcelable {
     }
 
     private final ShieldKind kind;
+    private Bitmap image;
 
     public Shield(Context context, ShieldKind kind) {
         super();
         this.kind = kind;
         if(kind == ShieldKind.VALKYRJASHIELD) {
             super.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.valkyrjashield));
+            image = BitmapFactory.decodeResource(context.getResources(), R.drawable.valkyrjashield);
         }
         if(kind == ShieldKind.STONEBUCKLER) {
             super.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.stonebuckler));
+            image = BitmapFactory.decodeResource(context.getResources(), R.drawable.stonebuckler);
         }
         if(kind == ShieldKind.TORNYSHIELD) {
             super.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.tornyshield));
+            image = BitmapFactory.decodeResource(context.getResources(), R.drawable.tornyshield);
         }
     }
     public Shield(ShieldKind kind){
@@ -77,7 +81,7 @@ public class Shield extends ArtifactObject implements Parcelable {
 
     @Override
     public String getDescription() {
-        return this.kind.name + " : " + " speed : " + this.speed() + " health : " + this.health() + " damage : " + this.damage();
+        return this.kind.name() + " : "  + " defense : " + this.health();
     }
 
     public int speed() {
@@ -92,7 +96,24 @@ public class Shield extends ArtifactObject implements Parcelable {
         return kind.damage;
     }
 
+    @Override
+    public Artifact getArtifact() {
+        return this;
+    }
+
     public ShieldKind kind() {
         return kind;
     }
+
+    @Override
+    public String toString(){
+        return this.kind.name() + " " + (int) damage();
+    }
+
+    @Override
+    public Bitmap getBitmap() {
+        return super.getBitmap();
+    }
+
+
 }

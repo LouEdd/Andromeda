@@ -1,10 +1,12 @@
 package taing.tran.vivier.androidgame.Artefact;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.Random;
 
@@ -41,9 +43,19 @@ public class RandomBox extends ArtifactObject implements Parcelable{
     };
 
     public static RandomBox createShield(int x, int y, Context context){
-        Bitmap image = BitmapFactory.decodeResource(context.getResources(), R.drawable.box);
+        Bitmap image = BitmapFactory.decodeResource(context.getResources(), R.drawable.treasure);
         Shield shield = new Shield(context, Shield.ShieldKind.values()[new Random().nextInt(Shield.ShieldKind.values().length)]);
         return new RandomBox(image, x, y, shield);
+    }
+
+    public static RandomBox createWeapon(int x, int y, Context context){
+        Bitmap image = BitmapFactory.decodeResource(context.getResources(), R.drawable.treasure);
+        Weapon weapon = new Weapon((Activity) context, Weapon.WeaponKind.values()[new Random().nextInt(Weapon.WeaponKind.values().length)]);
+        return new RandomBox(image, x, y, weapon);
+    }
+
+    public Bitmap getBitmap(){
+        return artifact.getBitmap();
     }
 
     @Override
@@ -74,5 +86,9 @@ public class RandomBox extends ArtifactObject implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeValue(artifact);
+    }
+
+    public Artifact getArtifact() {
+        return artifact;
     }
 }

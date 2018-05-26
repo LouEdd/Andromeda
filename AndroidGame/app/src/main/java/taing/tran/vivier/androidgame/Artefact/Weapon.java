@@ -2,13 +2,16 @@ package taing.tran.vivier.androidgame.Artefact;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import taing.tran.vivier.androidgame.DuelActivity;
 import taing.tran.vivier.androidgame.R;
 
-public class Weapon extends ArtifactObject{
+public class Weapon extends ArtifactObject implements Parcelable{
     public enum WeaponKind {
         Sword(15, 0, 0),
         Dagger(8, 5, 0),
@@ -46,7 +49,7 @@ public class Weapon extends ArtifactObject{
 
     @Override
     public String getDescription() {
-        return null;
+        return this.kind.name()  + " : " + " damage : " + this.damage();
     }
 
     public int speed() {
@@ -60,6 +63,12 @@ public class Weapon extends ArtifactObject{
     public double damage() {
         return kind.damage;
     }
+
+    @Override
+    public Artifact getArtifact() {
+        return this;
+    }
+
     public WeaponKind kind() {
         return kind;
     }
@@ -67,5 +76,37 @@ public class Weapon extends ArtifactObject{
     @Override
     public String toString(){
         return this.kind.name() + " " + (int) damage();
+    }
+
+    protected Weapon(Parcel in) {
+        kind = (WeaponKind) in.readValue(WeaponKind.class.getClassLoader());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(kind);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Weapon> CREATOR = new Parcelable.Creator<Weapon>() {
+        @Override
+        public Weapon createFromParcel(Parcel in) {
+            return new Weapon(in);
+        }
+
+        @Override
+        public Weapon[] newArray(int size) {
+            return new Weapon[size];
+        }
+    };
+
+    @Override
+    public Bitmap getBitmap() {
+        return super.getBitmap();
     }
 }

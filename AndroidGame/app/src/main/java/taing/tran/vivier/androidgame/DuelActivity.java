@@ -56,9 +56,7 @@ public class DuelActivity extends AppCompatActivity{
         pbFighter1.setProgress(hp1);
         pbFighter2.setProgress(hp2);
 
-
-        ArtifactAdapter artifactAdapter = new ArtifactAdapter(this, R.layout.listweapon,
-                players.get(indexFighter1).getInventory());
+        ArtifactAdapter artifactAdapter = new ArtifactAdapter(this, R.layout.listweapon, players.get(indexFighter1).getInventory());
         listView.setAdapter(artifactAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

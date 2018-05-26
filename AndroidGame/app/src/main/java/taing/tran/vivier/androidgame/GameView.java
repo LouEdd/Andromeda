@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import taing.tran.vivier.androidgame.Artefact.Artifact;
+import taing.tran.vivier.androidgame.Artefact.Weapon;
 import taing.tran.vivier.androidgame.Persona.Character;
 import taing.tran.vivier.androidgame.Persona.Segment;
 import taing.tran.vivier.androidgame.Quizz.QuizzActivity;
@@ -67,6 +68,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         Log.i(getClass().getName(), "init: Génération du personnage principal");
         Character mainPlayer = new Character(this.getContext(), false);
+        mainPlayer.addInventory(new Weapon(this.activity, Weapon.WeaponKind.Dagger));
         mainPlayer.setX(1000);
         mainPlayer.setY(1000);
         Log.i(getClass().getName(), "init: Génération des IA");
@@ -151,7 +153,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         for (Artifact artifact : battlefield.getArtifacts()) {
             if (Rect.intersects(artifact.getRect(), players.get(0).getRect())) {
                 artifacts.add(artifact);
-                players.get(0).addInventory(artifact);
+                players.get(0).addInventory(artifact.getArtifact());
+                Log.i("MYART", artifact.getArtifact().getDescription() + "");
                 String text = artifact.getDescription();
                 //Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
             }

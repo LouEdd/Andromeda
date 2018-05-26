@@ -45,6 +45,11 @@ public class Penalty extends ArtifactObject{
         return kind.damage;
     }
 
+    @Override
+    public Artifact getArtifact() {
+        return this;
+    }
+
     public PenaltyKind kind() {
         return kind;
     }
