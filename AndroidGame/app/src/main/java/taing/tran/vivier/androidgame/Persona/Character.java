@@ -90,7 +90,7 @@ public class Character implements Parcelable {
     };
 
     public int getHealth(){
-        return health;
+        return (health < 0)?0:health;
     }
 
     public int getX(){

@@ -1,8 +1,6 @@
 package taing.tran.vivier.androidgame;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,22 +16,28 @@ import taing.tran.vivier.androidgame.Artefact.Artifact;
 import taing.tran.vivier.androidgame.Artefact.ArtifactAdapter;
 import taing.tran.vivier.androidgame.Artefact.Weapon;
 import taing.tran.vivier.androidgame.Persona.Character;
-import taing.tran.vivier.androidgame.Quizz.QuizzActivity;
 
 
 public class DuelActivity extends AppCompatActivity{
-    private int hp;
-    private Character fighter1;
-    private Character ennemy;
-    private ProgressBar progressBar;
-    private Artifact artefact;
+    private int hp1;
+    private int hp2;
+    private ArrayList<Character> players;
+    private int indexFighter1;
+    private int indexFighter2;
+    //private Character fighter1;
+    //private Character ennemy;
+    private ProgressBar pbFighter1;
+    private ProgressBar pbFighter2;
+    private Artifact artefact1;
+    private Artifact artefact2;
     private ArrayList<Artifact> list = new ArrayList<>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.duel_activity);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar2);
+        pbFighter1 = (ProgressBar) findViewById(R.id.progressBar1);
+        pbFighter2 = (ProgressBar) findViewById(R.id.progressBar2);
 
         final Button button = (Button) findViewById(R.id.buttonDuel);
         final ListView listView = (ListView) findViewById(R.id.artefact_list);
@@ -50,27 +54,54 @@ public class DuelActivity extends AppCompatActivity{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                artefact = (Artifact) adapterView.getItemAtPosition(i);
+                artefact1 = (Artifact) adapterView.getItemAtPosition(i);
             }
         });
 
         Intent intent = getIntent();
-        fighter1 = ((Character) intent.getParcelableExtra("fighter1"));
-        ennemy = (Character) intent.getParcelableExtra("ennemy");
-        hp = ennemy.getHealth();
+        players = intent.getParcelableArrayListExtra("players");
+        //fighter1 = ((Character) intent.getParcelableExtra("fighter1"));
+        //ennemy = (Character) intent.getParcelableExtra("ennemy");
+        indexFighter1 = intent.getIntExtra("indexFighter1", -1);
+        indexFighter2 = intent.getIntExtra("indexFighter2", -1);
+        if(indexFighter1 == -1 || indexFighter2 == -1) {
+            onBackPressed();
+        }
+        hp1 = players.get(indexFighter1).getHealth();
+        hp2 = players.get(indexFighter2).getHealth();
         //hp = intent.getIntExtra("hp", 0);
-        progressBar.setProgress(hp);
-
+        pbFighter1.setProgress(hp1);
+        pbFighter2.setProgress(hp2);
     }
 
     public void onClickButtonDuel(View view) {
-        if (artefact == null) {
-            return;
+        if (artefact1 != null) {
+            hp2 -= artefact1.damage();
+            pbFighter2.setProgress(hp2);
+            players.get(indexFighter2).setHealth(hp2);
+            if(hp2 <= 0) {
+                Log.i(getClass().getName(), "onClickButtonDuel: Fighter 2 died");
+                players.remove(indexFighter2);
+                Intent intent = new Intent();
+                intent.putParcelableArrayListExtra("players", players);
+                setResult(4, intent);
+                finish();
+            }
         }
-
-        hp -= artefact.damage();
-        progressBar.setProgress(hp);
-        ennemy.setHealth(hp);
+        if(artefact2 != null) {
+            hp1 -= artefact2.damage();
+            pbFighter2.setProgress(hp2);
+            players.get(indexFighter1).setHealth(hp1);
+            if (hp1 <= 0) {
+                Log.i(getClass().getName(), "onClickButtonDuel: Fighter 1 died");
+                players.remove(indexFighter1);
+                Intent intent = new Intent();
+                intent.putParcelableArrayListExtra("players", players);
+                setResult(4, intent);
+                finish();
+            }
+        }
+        /*
         if (hp <= 0) {
 
             Log.e("INFOR", "Duel");
@@ -81,15 +112,14 @@ public class DuelActivity extends AppCompatActivity{
             setResult(4, intent);
             //fighter1.isFighting(false);
             finish();
-        }
+        }*/
     }
 
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putExtra("fighter1", fighter1 );
-        intent.putExtra("ennemy", ennemy );
-        setResult(2, intent);
+        intent.putParcelableArrayListExtra("players", players);
+        setResult(4, intent);
         finish();
     }
 }

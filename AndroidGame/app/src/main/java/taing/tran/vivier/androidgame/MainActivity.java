@@ -10,6 +10,8 @@ import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import taing.tran.vivier.androidgame.Persona.Character;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(getClass().getName(), "onCreate: main activity started");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -53,12 +56,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("INFOR", "MainActivityBefore" + requestCode + " " + resultCode );
-        if (requestCode == 2) {
-            Log.e("INFOR", "MainActivity");
+        if (resultCode == 2) {
+            Log.d(getClass().getName(), "onActivityResult: Quizz/DuelActivity result ok");
+            /*
             Character ennemy = (Character) data.getParcelableExtra("ennemy");
             hp = ennemy.getHealth();
             gameView.setHealth(hp);
+            */
+            ArrayList<Character> players = data.getParcelableArrayListExtra("players");
+            gameView.setPlayers(players);
+            gameView.setHealth(players.get(0).getHealth());
         }
         /*if(requestCode == 3) {
             Intent newIntent = new Intent(this, DuelActivity.class);
